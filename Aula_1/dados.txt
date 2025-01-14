@@ -1,0 +1,7 @@
+# Arquivo de Dados Caso: exemplo
+# zlt
+0.02+0.16j
+# Vfin (modulo e fase)
+1.0     0.0
+# Nc(carga em pu  fator de potencia  natureza do FP )
+0.6  0.8  IND
