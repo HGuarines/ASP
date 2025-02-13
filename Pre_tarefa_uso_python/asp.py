@@ -32,8 +32,8 @@ def gerar_arquivo_texto(nome_arquivo, titulo, calculos):
 
         for expressao, resultado in calculos:
             if type(resultado) is str:
-                f.write(f'{expressao:10} = {(resultado)}\n')
+                f.write(f'{expressao:10}{(resultado)}\n')
             else:
-                f.write(f'{expressao:10} = {float(resultado):7.2f}\n')
+                f.write(f'{expressao:10}{float(resultado):7.2f}\n')
 
         f.write(linha)
