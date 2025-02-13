@@ -1,17 +1,19 @@
 
 *********************************************
           RESPOSTAS USO PYTHON          
-                    Henrique B Guarines                    
+          Henrique B Guarines                    
 
 *********************************************
 
 1.        
 (a)
-O número 0.000162 deve ser escrito da segunte maneira no script: 1.62e-4
+O nÃºmero 0.000162 deve ser escrito da segunte maneira no script: 1.62e-4
 (b)
-O número Pi (3.141592653589793) deve ser importado de math da segunte maneira: math.pi
+O nÃºmero Pi (3.141592653589793) deve ser importado de math da segunte maneira: math.pi
 (c)
-O número de Euler (e) também deve ser importado de math. Para elevar x por y devemos fazer a operação x**y. e**2 = 7.3890560989306495
+O nÃºmero de Euler (e) tambÃ©m deve ser importado de math. Para elevar x por y devemos fazer a operaÃ§Ã£o x**y. e**2 = 7.3890560989306495
+
+*********************************************
 
 2.        
 Linha 33: Foi definido o nome do arquivo
@@ -21,19 +23,25 @@ Linha 36: Cria uma linha com 45 (*) e pula uma linha
 Linha 37 a 46: Comando write() escreve o que estiver dento dos parenteses
 Linha 47: Comando close() finaliza o processo de escrever dentro do txt
 
+*********************************************
+
 3.        
 Soma:     Utiliza-se o sinal + para somar. Ex: 2 + 3 = 5
-Subtração: Utiliza-se o sinal - para subtrair. Ex: 2 - 3 = -1
-Divisão:  Utiliza-se o sinal / para dividir. Ex: 2/3 = 0.667
-Multiplicação: Utiliza-se o sinal * para multiplicar. Ex: 2 * 3 = 6
+SubtraÃ§Ã£o: Utiliza-se o sinal - para subtrair. Ex: 2 - 3 = -1
+DivisÃ£o:  Utiliza-se o sinal / para dividir. Ex: 2/3 = 0.667
+MultiplicaÃ§Ã£o: Utiliza-se o sinal * para multiplicar. Ex: 2 * 3 = 6
+
+*********************************************
 
 4.        
-AA biblioteca math é um módulo embutido na linguagem Python que fornece funções matemáticas para cálculos mais complexos.
+A biblioteca math Ã© um mÃ³dulo embutido na linguagem Python que fornece funÃ§Ãµes matemÃ¡ticas para cÃ¡lculos mais complexos.
 Para utilizar essa biblioteca precisamos primeiro importa-la utilizando "import math" e podemos fazer calculos como o cosseno de pi math.cos(math.pi) = -1.0
 
+*********************************************
+
 5.        
-Há diversas maneiras de se criar uma matriz no python. No entanto, a biblioteca NumPy tem a função array
-Após "import Numpy as np" fazemos np.array([]) e inserimos valores ou listas de valores dentro do array. 
+HÃ¡ diversas maneiras de se criar uma matriz no python. No entanto, a biblioteca NumPy tem a funÃ§Ã£o array
+ApÃ³s "import Numpy as np" fazemos np.array([]) e inserimos valores ou listas de valores dentro do array. 
 [[2 3]
  [4 5]]
 
