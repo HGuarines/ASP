@@ -46,3 +46,34 @@ Após "import Numpy as np" fazemos np.array([]) e inserimos valores ou listas de
  [4 5]]
 
 *********************************************
+
+6.        
+A biblioteca cmath foi criada para facilitar e otimizar operações com números complexos
+Para utiliza-la basta traze-la ao programa com "import cmath" e será possivel trabalhar com números complexos.
+Ex: cmath.sqrt(-1) = 1j
+
+*********************************************
+
+7.       
+A biblioteca cmath tem as funções:
+ 
+cmath.rect(modulo, angulo) que devolve a forma retangular
+cmath.phase(z) onde z é um número complexo e devolve o seu angulo.
+
+Para z = 1 + 1j temos: 
+cmath.phase(z) = 0.7853981633974483
+módulo de z = abs(z) = 1.4142135623730951
+
+Para módulo = 1 e theta = pi/2, temos:
+cmath.rect(1, pi/2) = (6.123233995736766e-17+1j)
+
+*********************************************
+
+8.       
+Podemos gerar gráficos no python utilizando a biblioteca matplotlib
+Principais comandos:
+plot():   Plota o gráfico
+xlabel() e ylabel(): Criam os eixos horizontais e verticais respectivamente
+show():   Mostra o gráfico
+
+*********************************************
