@@ -113,3 +113,125 @@ plt.ylabel('Função cos(x)') -> Adiciona o titulo 'Função cos(x)' no eixo y
 (t) e^π = 23.141
 
 *********************************************
+
+12.       
+(a) O determinante de A: 446776.0
+
+(b) A transposta de A:
+[[   2 2000   -4]
+ [ -19    4   -2]
+ [  12    6   13]]
+
+(c) O elemento da linha 2 e coluna 3 de A: 6
+
+(d) A inversa de A:
+[[  15  -15    5]
+ [2013    8   -1]
+ [   9    2    6]]
+
+(e) A soma entre a transposta de B e A:
+Normalmanete não seria possível somar uma matriz 3x3 por uma 1x3. O python repete a linha de B.T mais duas vezes para igualar com a quantidade de linhas da matriz A
+ [[  15  -15    5]
+ [2013    8   -1]
+ [   9    2    6]]
+
+(f) A diferença entre a transposta de A e B:
+Normalmanete não seria possível subtrair uma matriz 3x3 por uma 1x3. O python repete a linha de B.T mais duas vezes para igualar com a quantidade de linhas da matriz A
+ [[ -11 1987  -17]
+ [ -23    0   -6]
+ [  19   13   20]]
+
+(g) O produto A x D^T:
+[[ -168]
+ [24066]
+ [  -33]]
+
+(h) A linha 2 de D^T: [12]
+
+(i) A coluna 3 de D: [3]
+
+(j) Calcular A/C:
+[[  1.  -1.   1.]
+ [193. -26.  60.]
+ [ -0.   0.   1.]]
+
+(k) Qual o vetor X tal que AX = B:
+[[ 0.01]
+ [-1.13]
+ [-0.71]]
+
+(l) O número de elementos de A: 9.0
+
+(m) O posto da matriz A: 3
+
+(n) A diagonal principal da matriz A: [ 2  4 13]
+
+(o) A ordem da matriz A: (3, 3)
+
+(p) A ordem da matriz B: (3, 1)
+
+(q) A transposta da matriz A:
+[[   2 2000   -4]
+ [ -19    4   -2]
+ [  12    6   13]]
+
+(r) 
+O elemento (1,2) da matriz A: -19
+O elemento (2,1) da matriz B: 4
+
+*********************************************
+
+14.       
+(a) (2 + 3i)^2: (-5+12j)
+(b) 1 + a + a^2: (0.0 + 0.0j)
+(c) 1 - a: (1.5-0.866j)
+(d) j^47 + 3j + 8: (8+2j)
+(e) (2 - 5i)^-34: (-0+0j)
+(f) a - a^2: (-0+1.732j)
+(g) a^25: (-0.5+0.865j)
+(h) a^143: (-0.5-0.864j)
+(i) j + a + a^4: (-1+2.732j)
+
+*********************************************
+
+15.       
+(a) A^2:
+ [[-36.+10.j  16.-22.j  -4.-16.j]
+ [ 18.-21.j  15.-28.j  14. +2.j]
+ [ 21.+15.j  31.-37.j  -2. -2.j]]
+
+(b) A^-1:
+[[ 0.0326-0.0079j -0.0899+0.0562j  0.1225-0.064j ]
+ [ 0.0775+0.064j   0.1034+0.0854j -0.0258-0.0213j]
+ [-0.2461-0.0337j  0.0719-0.2449j  0.182 +0.2112j]]
+
+(c) F = A x B:
+[[34.-18.j]
+ [19.+11.j]
+ [29. -3.j]]
+
+(d) A \ B: como a matriz B não tem inversa, a operação A * B^-1 não é possível.
+
+(e) A^T:
+[[ 2.+4.j -0.-3.j  6.+0.j]
+ [ 2.-4.j  5.-2.j  3.-1.j]
+ [-2.+0.j  2.+0.j  2.+0.j]]
+
+(f) A^-1 x B:
+[[-0.04+0.39j]
+ [ 0.59+0.4j ]
+ [-0.44+1.03j]]
+
+(g) B^T x C:
+[[ 7.  +5.j  -2.23-9.6j  1.23-4.4j]]
+
+(h) D x B:
+[[4.+50.j]]
+
+*********************************************
+
+17.       
+(a)       (-0.14+1.34j)
+(b)       (-0.71-0.47j)
+
+*********************************************
