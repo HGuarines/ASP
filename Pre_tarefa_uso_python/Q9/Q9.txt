@@ -1,0 +1,12 @@
+
+*********************************************
+          RESPOSTAS USO PYTHON          
+          Henrique B Guarines                    
+
+*********************************************
+
+9.
+Basta utilizar o comando ylabel() para adicionar um rótulo ao eixo y
+plt.ylabel('Função cos(x)') -> Adiciona o titulo 'Função cos(x)' no eixo y
+
+*********************************************

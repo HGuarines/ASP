@@ -1,0 +1,12 @@
+
+*********************************************
+          RESPOSTAS USO PYTHON          
+          Henrique B Guarines                    
+
+*********************************************
+
+4. 
+A biblioteca math é um módulo embutido na linguagem Python que fornece funções matemáticas para cálculos mais complexos.
+Para utilizar essa biblioteca precisamos primeiro importa-la utilizando "import math" e podemos fazer calculos como o cosseno de pi math.cos(math.pi) = -1.0
+
+*********************************************

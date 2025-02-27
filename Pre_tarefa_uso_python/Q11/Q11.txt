@@ -1,0 +1,30 @@
+
+*********************************************
+          RESPOSTAS USO PYTHON          
+          Henrique B Guarines                    
+
+*********************************************
+
+11. (arrendondados a 3 casas decimais)
+(a) cos²(DA⁰) + sen(2π/3) = 1.866
+(b) arcseno(MA/100) + arctang(DA) + tanh(AA/3000) = 2.197
+(c) log_10(MA) + ln(DA) + log_2(AA) = 14.61
+(d) 2526 + e^(-DA) + 34 × 10^AA = 3.4e+2001
+(e) Log_AA(MA) = 0.327
+(f) senh(AA + i3) = (-1.92116963514789e+868 + 2.73856090149604e+867j)
+(g) arcoseno(MA/100) = 1.451
+(h) senh(DA)221206.696
+(i) cosh(MA) + tangente(DA) = 81377.859
+(j) arcocosseno(DA/100) = 1.44
+(k) round(35.34) e round(DA.38) = 35 e 13
+(l) floor(MA.3) e floor(8.8) = 12 e 8
+(m) ceil(2.3) e ceil(DA.8) = 3 e 14
+(n) fix(MA.3) e fix(32.8) (truncar) = 12 e 32
+(o) divisão inteira de MA por 4 e DA por 3 = 3 e 4
+(p) abs(-MA) = 12.0
+(q) angle(DA - 3i) (fase) = -0.227
+(r) real(MA - 4i) = 12.0
+(s) log(MA) = 1.079
+(t) e^π = 23.141
+
+*********************************************

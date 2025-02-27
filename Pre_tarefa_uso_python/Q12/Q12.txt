@@ -1,0 +1,73 @@
+
+*********************************************
+          RESPOSTAS USO PYTHON          
+          Henrique B Guarines                    
+
+*********************************************
+
+12. 
+(a) O determinante de A: 446776.0
+
+(b) A transposta de A:
+[[   2 2000   -4]
+ [ -19    4   -2]
+ [  12    6   13]]
+
+(c) O elemento da linha 2 e coluna 3 de A: 6
+
+(d) A inversa de A:
+[[  15  -15    5]
+ [2013    8   -1]
+ [   9    2    6]]
+
+(e) A soma entre a transposta de B e A:
+Normalmanete não seria possível somar uma matriz 3x3 por uma 1x3. O python repete a linha de B.T mais duas vezes para igualar com a quantidade de linhas da matriz A
+ [[  15  -15    5]
+ [2013    8   -1]
+ [   9    2    6]]
+
+(f) A diferença entre a transposta de A e B:
+Normalmanete não seria possível subtrair uma matriz 3x3 por uma 1x3. O python repete a linha de B.T mais duas vezes para igualar com a quantidade de linhas da matriz A
+ [[ -11 1987  -17]
+ [ -23    0   -6]
+ [  19   13   20]]
+
+(g) O produto A x D^T:
+[[ -168]
+ [24066]
+ [  -33]]
+
+(h) A linha 2 de D^T: [12]
+
+(i) A coluna 3 de D: [3]
+
+(j) Calcular A/C:
+[[  1.  -1.   1.]
+ [193. -26.  60.]
+ [ -0.   0.   1.]]
+
+(k) Qual o vetor X tal que AX = B:
+[[ 0.01]
+ [-1.13]
+ [-0.71]]
+
+(l) O número de elementos de A: 9.0
+
+(m) O posto da matriz A: 3
+
+(n) A diagonal principal da matriz A: [ 2  4 13]
+
+(o) A ordem da matriz A: (3, 3)
+
+(p) A ordem da matriz B: (3, 1)
+
+(q) A transposta da matriz A:
+[[   2 2000   -4]
+ [ -19    4   -2]
+ [  12    6   13]]
+
+(r) 
+O elemento (1,2) da matriz A: -19
+O elemento (2,1) da matriz B: 4
+
+*********************************************

@@ -1,0 +1,16 @@
+
+*********************************************
+          RESPOSTAS USO PYTHON          
+          Henrique B Guarines                    
+
+*********************************************
+
+1. 
+(a)
+O número 0.000162 deve ser escrito da segunte maneira no script: 1.62e-4
+(b)
+O número Pi (3.141592653589793) deve ser importado de math da segunte maneira: math.pi
+(c)
+O número de Euler (e) também deve ser importado de math. Para elevar x por y devemos fazer a operação x**y. e**2 = 7.3890560989306495
+
+*********************************************

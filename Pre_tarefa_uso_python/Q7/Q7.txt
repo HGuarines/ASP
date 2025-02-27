@@ -1,0 +1,21 @@
+
+*********************************************
+          RESPOSTAS USO PYTHON          
+          Henrique B Guarines                    
+
+*********************************************
+
+7.
+A biblioteca cmath tem as funções:
+ 
+cmath.rect(modulo, angulo) que devolve a forma retangular
+cmath.phase(z) onde z é um número complexo e devolve o seu angulo.
+
+Para z = 1 + 1j temos: 
+cmath.phase(z) = 0.7853981633974483
+módulo de z = abs(z) = 1.4142135623730951
+
+Para módulo = 1 e theta = pi/2, temos:
+cmath.rect(1, pi/2) = (6.123233995736766e-17+1j)
+
+*********************************************

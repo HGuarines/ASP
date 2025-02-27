@@ -1,0 +1,14 @@
+
+*********************************************
+          RESPOSTAS USO PYTHON          
+          Henrique B Guarines                    
+
+*********************************************
+
+5. 
+Há diversas maneiras de se criar uma matriz no python. No entanto, a biblioteca NumPy tem a função array
+Após "import Numpy as np" fazemos np.array([]) e inserimos valores ou listas de valores dentro do array. 
+[[2 3]
+ [4 5]]
+
+*********************************************
