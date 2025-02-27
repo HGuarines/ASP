@@ -1,0 +1,15 @@
+
+*********************************************
+          RESPOSTAS USO PYTHON          
+          Henrique B Guarines                    
+
+*********************************************
+
+8.
+Podemos gerar gráficos no python utilizando a biblioteca matplotlib
+Principais comandos:
+plot(): Plota o gráfico
+xlabel() e ylabel(): Criam os eixos horizontais e verticais respectivamente
+show(): Mostra o gráfico
+
+*********************************************

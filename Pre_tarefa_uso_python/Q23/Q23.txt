@@ -1,0 +1,16 @@
+
+*********************************************
+          RESPOSTAS USO PYTHON          
+          Henrique B Guarines                    
+
+*********************************************
+
+23.  
+considerando os valores da segunda linha como y1
+E considerando os calores da terceira linha como y2, temos:
+Equação do polinômio de 2º grau para y1: 0.4429x² + 0.2361x + 0.1213
+Equação do polinômio de 3º grau para y1: 0.4667x³ + -0.9571x² + 1.6321x + -0.3414
+Equação do polinômio de 2º grau para y2: 0.3514x² + 0.1389x + 0.1097
+Equação do polinômio de 3º grau para y2: 1.1333x³ + -3.0486x² + 3.5293x + -1.0140
+
+*********************************************

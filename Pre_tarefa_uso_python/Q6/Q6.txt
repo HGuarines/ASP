@@ -1,0 +1,13 @@
+
+*********************************************
+          RESPOSTAS USO PYTHON          
+          Henrique B Guarines                    
+
+*********************************************
+
+6. 
+A biblioteca cmath foi criada para facilitar e otimizar operações com números complexos
+Para utiliza-la basta traze-la ao programa com "import cmath" e será possivel trabalhar com números complexos.
+Ex: cmath.sqrt(-1) = 1j
+
+*********************************************

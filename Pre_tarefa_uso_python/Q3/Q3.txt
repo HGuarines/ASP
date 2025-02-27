@@ -1,0 +1,14 @@
+
+*********************************************
+          RESPOSTAS USO PYTHON          
+          Henrique B Guarines                    
+
+*********************************************
+
+3. 
+Soma: Utiliza-se o sinal + para somar. Ex: 2 + 3 = 5
+Subtração: Utiliza-se o sinal - para subtrair. Ex: 2 - 3 = -1
+Divisão: Utiliza-se o sinal / para dividir. Ex: 2/3 = 0.667
+Multiplicação: Utiliza-se o sinal * para multiplicar. Ex: 2 * 3 = 6
+
+*********************************************
