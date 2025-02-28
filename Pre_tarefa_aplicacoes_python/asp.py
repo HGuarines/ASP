@@ -74,13 +74,15 @@ def pol2ret(r, phi):
 
     Parâmetros:
     r (float): O módulo do número complexo.\n
-    phi (float): O argumento do número complexo em radianos.
+    phi (float): O argumento do número complexo em graus.
 
     Retorno:
     O número complexo na forma retangular. (a + jb)
     """
     from cmath import rect
-    return rect(r, phi)
+    from numpy import radians
+    phi_rad = radians(phi)
+    return rect(r, phi_rad)
 
 
 def pot_comp1f(V, I):
@@ -96,3 +98,51 @@ def pot_comp1f(V, I):
     """
     S = V * I.conjugate()
     return S
+
+
+def pot_comp3f(Va, Ia, Vb, Ib, Vc, Ic):
+    """
+    # Calcula a potência complexa trifásica S.
+    
+    Parâmetros:\n
+    Va, Vb, Vc: Tensões de fase (números complexos)\n
+    Ia, Ib, Ic: Correntes de fase (números complexos)
+    
+    Retorna:\n
+    Potência complexa total S.
+    """
+    from numpy import conj
+    Sa = Va * conj(Ia)
+    Sb = Vb * conj(Ib)
+    Sc = Vc * conj(Ic)
+    
+    S_total = Sa + Sb + Sc
+    return S_total
+
+
+def cor_carga(P, V, FP, N=3):
+    """
+    # Calcula a corrente de carga elétrica (I) em um sistema monofásico ou trifásico.
+
+    **Parâmetros:**\n
+    P (float): Potência ativa da carga em watts (W).\n
+    V (float): Tensão de operação em volts (V).\n
+    FP (float): Fator de potência (0 a 1).\n
+    N (int, opcional): Número de fases (1 para monofásico, 3 para trifásico). Padrão = 3.
+
+    **Retorno:**\n
+    I (float): Corrente de carga em amperes (A).
+    """
+    P = float(abs(P))  # Garantir que seja um número real positivo
+    V = float(abs(V))  
+    FP = float(FP)
+    
+    if N == 1:  # Monofásico
+        I = P / (V * FP)
+    elif N == 3:  # Trifásico
+        from math import sqrt
+        I = P / (sqrt(3) * V * FP)
+    else:
+        raise ValueError("O número de fases deve ser 1 (monofásico) ou 3 (trifásico).")
+
+    return I
