@@ -1,0 +1,15 @@
+
+*********************************************
+          RESPOSTAS USO PYTHON          
+          Henrique B Guarines                    
+
+*********************************************
+
+27. 
+A biblioteca matplotlib é uma biblioteca de plotagem 2D em Python 
+que produz figuras de qualidade em uma variedade de formatos e ambientes. 
+Matplotlib pode ser usado para gerar gráficos, histogramas, espectros de potência, 
+gráficos de barras, gráficos de erro, gráficos de dispersão, etc. 
+Além disso, a biblioteca matplotlib é usada para criar gráficos interativos em Python.
+
+*********************************************

@@ -33,7 +33,6 @@ def gerar_arquivo_texto(nome_arquivo, titulo, calculos):
         conteudo_adicionar.append(f'{" " * 10}{titulo}{" " * 10}\n')
         conteudo_adicionar.append(f'{" " * 10}Henrique B Guarines{" " * 20}\n')
         conteudo_adicionar.append(linha)
-        conteudo_adicionar.append('\n')
 
     # Carregar conteúdo existente para evitar duplicações
     conteudo_existente = ""
