@@ -1,0 +1,27 @@
+
+*********************************************
+          APLICAÇÕES PYTHON          
+          Henrique B Guarines                    
+
+*********************************************
+
+6.
+Dados:
+Z1 = (1+2j) Ω
+Z2 = (3+4j) Ω
+Z3 = 2.2 ∠ 63.4° Ω
+Z4 = 5.0 ∠ 53.1° Ω
+
+A soma dos números complexos em retangular é:
+Zeq = Z1 + Z2 = (4+6j) Ω
+
+A subtração dos números complexos em polar é:
+Zeq = Z3 - Z4 = 2.8 ∠ -179.2° Ω
+
+A multiplicaçào de um número complexo em retangular e outro em polar é:
+Zeq = Z1 * Z4 = (4.84+10.08j) Ω
+
+E a divisão dos números complexos em retangular e outro em polar é:
+Zeq = Z2 / Z3 = (1.38+1.76j) Ω
+
+*********************************************

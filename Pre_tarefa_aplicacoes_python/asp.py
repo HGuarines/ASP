@@ -103,11 +103,11 @@ def pot_comp1f(V, I):
 def pot_comp3f(Va, Ia, Vb, Ib, Vc, Ic):
     """
     # Calcula a potência complexa trifásica S.
-    
+
     Parâmetros:\n
     Va, Vb, Vc: Tensões de fase (números complexos)\n
     Ia, Ib, Ic: Correntes de fase (números complexos)
-    
+
     Retorna:\n
     Potência complexa total S.
     """
@@ -115,7 +115,7 @@ def pot_comp3f(Va, Ia, Vb, Ib, Vc, Ic):
     Sa = Va * conj(Ia)
     Sb = Vb * conj(Ib)
     Sc = Vc * conj(Ic)
-    
+
     S_total = Sa + Sb + Sc
     return S_total
 
@@ -134,15 +134,78 @@ def cor_carga(P, V, FP, N=3):
     I (float): Corrente de carga em amperes (A).
     """
     P = float(abs(P))  # Garantir que seja um número real positivo
-    V = float(abs(V))  
+    V = float(abs(V))
     FP = float(FP)
-    
+
     if N == 1:  # Monofásico
         I = P / (V * FP)
     elif N == 3:  # Trifásico
         from math import sqrt
         I = P / (sqrt(3) * V * FP)
     else:
-        raise ValueError("O número de fases deve ser 1 (monofásico) ou 3 (trifásico).")
+        raise ValueError(
+            "O número de fases deve ser 1 (monofásico) ou 3 (trifásico).")
 
     return I
+
+
+def imp_serie(Z1, Z2):
+    """
+    # Calcula a impedância equivalente de dois elementos em série.
+
+    Parâmetros:
+    Z1 (a + jb): A primeira impedância.\n
+    Z2 (a + jb): A segunda impedância.
+
+    Retorno:
+    A impedância equivalente dos dois elementos em série. (a + jb)
+    """
+    return Z1 + Z2
+
+
+def imp_paral(Z1, Z2):
+    """
+    # Calcula a impedância equivalente de dois elementos em paralelo.
+
+    Parâmetros:
+    Z1 (a + jb): A primeira impedância.\n
+    Z2 (a + jb): A segunda impedância.
+
+    Retorno:
+    A impedância equivalente dos dois elementos em paralelo. (a + jb)
+    """
+    return (Z1 * Z2) / (Z1 + Z2)
+
+
+def oper_comp(Z1, form1, op, Z2, form2):
+    """
+    # Realiza operações com números complexos.
+
+    Parâmetros:
+    Z1 (complex): O primeiro número complexo.\n
+    form1 (str): A forma do primeiro número complexo ("r: retangular" ou "p: polar").\n
+    op (str): O operador a ser aplicado ("+", "-", "*", "/").\n
+    Z2 (complex): O segundo número complexo.\n
+    form2 (str): A forma do segundo número complexo ("r: retangular" ou "p: polar").
+
+    Retorno:
+    O resultado da operação entre os números complexos fornecidos.
+    """
+
+    if form1 == "p":
+        Z1 = pol2ret(*Z1)
+    if form2 == "p":
+        Z2 = pol2ret(*Z2)
+
+    if op == "+":
+        return Z1 + Z2
+    elif op == "-":
+        return Z1 - Z2
+    elif op == "*":
+        return Z1 * Z2
+    elif op == "/":
+        return Z1 / Z2
+    elif op not in ["+", "-", "*", "/"]:
+        raise ValueError("Operação inválida. Use '+', '-', '*' ou '/'.")
+    elif form1 not in ["r", "p"] or form2 not in ["r", "p"]:
+        raise ValueError("Forma inválida. Use 'r' ou 'p'.")
