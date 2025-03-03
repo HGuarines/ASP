@@ -6,10 +6,10 @@ import numpy as np
 # Dados de entrada
 Va = asp.pol2ret(220, 0)
 Ia = asp.pol2ret(10, 0)
-Vb = asp.pol2ret(220, 120)
-Ib = asp.pol2ret(10, 120)
-Vc = asp.pol2ret(220, 240)
-Ic = asp.pol2ret(10, 240)
+Vb = asp.pol2ret(220, 120, 'g')
+Ib = asp.pol2ret(10, 120, 'g')
+Vc = asp.pol2ret(220, 240, 'g')
+Ic = asp.pol2ret(10, 240, 'g')
 FP = 0.92
 
 # Calculo pot mono

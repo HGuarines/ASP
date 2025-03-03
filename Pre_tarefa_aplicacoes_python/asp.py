@@ -54,35 +54,47 @@ def gerar_arquivo_texto(nome_arquivo, titulo, calculos):
             f.write(linha)
 
 
-def ret2pol(cplx):
+def ret2pol(cplx, unidade='r'):
     """
     # Converte um número complexo retangular para forma polar.
 
     Parâmetros:
     cplx (complex): O número complexo a ser convertido. (a + jb)
+    unidade (str): A unidade do ângulo ('r' para radianos, 'g' para graus). Padrão é 'r'.
 
     Retorno:
     Uma tupla contendo o módulo e o argumento do número complexo fornecido. (r, phi)
     """
     from cmath import polar
-    return polar(cplx)
+    from numpy import degrees
+
+    r, phi = polar(cplx)
+
+    if unidade == 'g':
+        phi = degrees(phi)  # Converter radianos para graus
+
+    return r, phi
 
 
-def pol2ret(r, phi):
+def pol2ret(r, phi, unidade='r'):
     """
     # Converte um número complexo polar para forma retangular.
 
     Parâmetros:
     r (float): O módulo do número complexo.\n
-    phi (float): O argumento do número complexo em graus.
+    phi (float): O argumento do número complexo.\n
+    unidade (str): A unidade do ângulo ('r' para radianos, 'g' para graus). Padrão é 'r'.
 
     Retorno:
     O número complexo na forma retangular. (a + jb)
     """
     from cmath import rect
     from numpy import radians
-    phi_rad = radians(phi)
-    return rect(r, phi_rad)
+
+    if unidade == 'g':
+        phi = radians(phi)  # Converter graus para radianos
+
+    return rect(r, phi)
 
 
 def pot_comp1f(V, I):
