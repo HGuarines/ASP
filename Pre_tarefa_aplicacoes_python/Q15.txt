@@ -1,0 +1,16 @@
+
+*********************************************
+          Cálculo da Queda de Tensão Monofásica          
+          Henrique B Guarines                    
+
+*********************************************
+
+Dados de Entrada:
+Ic = 10 A
+DVc = 2 %
+Lc = 0.1 m
+Vfn = 100 V
+
+Seção do condutor (Sc) = 0.02 mm²
+
+*********************************************

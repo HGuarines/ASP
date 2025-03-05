@@ -287,18 +287,18 @@ def format_complex(c, form='r'):
             "Entrada inválida: deve ser um número complexo ou uma tupla (módulo, fase).")
 
     if form == 'r':
-        real_part = f'{c.real:.2f}' if c.real != 0 else ''
-        imag_part = f'{abs(c.imag):.2f}j' if c.imag != 0 else ''
+        parte_real = f'{c.real:.2f}' if c.real != 0 else ''
+        parte_imaginaria = f'{abs(c.imag):.2f}j' if c.imag != 0 else ''
         if c.imag > 0 and c.real != 0:
-            imag_part = f'+ {imag_part}'
+            parte_imaginaria = f'+ {parte_imaginaria}'
         elif c.imag < 0:
-            imag_part = f'- {imag_part}'
-        if real_part and imag_part:
-            return f'{real_part} {imag_part}'
-        elif real_part:
-            return real_part
-        elif imag_part:
-            return imag_part
+            parte_imaginaria = f'- {parte_imaginaria}'
+        if parte_real and parte_imaginaria:
+            return f'{parte_real} {parte_imaginaria}'
+        elif parte_real:
+            return parte_real
+        elif parte_imaginaria:
+            return parte_imaginaria
         else:
             return '0'
     elif form == 'p':
@@ -328,7 +328,7 @@ def quad_casc(A1, B1, C1, D1, A2, B2, C2, D2):
     return A, B, C, D
 
 
-def quad_par(A1, B1, C1, D1, A2, B2, C2, D2):
+def quad_par(A1, B1, C1, D1, A2, B2, C, D2):
     """
     # Calcula os parâmetros ABCD de um quadripolo obtido pela paralelo de dois quadripolos.
 
@@ -347,7 +347,7 @@ def quad_par(A1, B1, C1, D1, A2, B2, C2, D2):
     return A, B, C, D
 
 
-def cirpi(V2, I2, Z, Ya, Yb, nomearq):
+def cirpi(V2, I2, Z, Ya, Yb, nomearq=None):
     """
     # Calcula a tensão V1 e a corrente I1 no terminal transmissor de um circuito Pi,
     conhecendo a tensão V2, corrente I2, impedância Z e admitâncias Ya e Yb.
@@ -358,7 +358,7 @@ def cirpi(V2, I2, Z, Ya, Yb, nomearq):
     Z (complex): Impedância em série\n
     Ya (complex): Admitância shunt na entrada\n
     Yb (complex): Admitância shunt na saída\n
-    nomearq (str): Nome do arquivo de saída contendo os resultados
+    nomearq (str, opcional): Nome do arquivo para salvar os resultados. None por padrão.
 
     Retorno:
     (V1, I1) - Tensão e corrente no terminal transmissor
@@ -374,25 +374,26 @@ def cirpi(V2, I2, Z, Ya, Yb, nomearq):
     V1, I1 = np.dot(matriz_abcd, vetor_v2_i2)
 
     # Criar lista de cálculos formatados para salvar no arquivo
-    calculos = [
-        ('Dados de Entrada:', ''),
-        ("V2 = ", format_complex(V2)),
-        ("I2 = ", format_complex(I2)),
-        ("Z  = ", format_complex(Z)),
-        ("Ya = ", format_complex(Ya)),
-        ("Yb = ", format_complex(Yb)),
-        ('\nResultados:', ''),
-        ("V1 = ", format_complex(V1)),
-        ("I1 = ", format_complex(I1))
-    ]
+    if nomearq:
+        calculos = [
+            ('Dados de Entrada:', ''),
+            ("V2 = ", format_complex(V2)),
+            ("I2 = ", format_complex(I2)),
+            ("Z  = ", format_complex(Z)),
+            ("Ya = ", format_complex(Ya)),
+            ("Yb = ", format_complex(Yb)),
+            ('\nResultados:', ''),
+            ("V1 = ", format_complex(V1)),
+            ("I1 = ", format_complex(I1))
+        ]
 
-    # Salvar os resultados no arquivo utilizando a função existente
-    gerar_arquivo_texto(nomearq, "Resultados do Circuito Pi", calculos)
+        # Salvar os resultados no arquivo desejado
+        gerar_arquivo_texto(nomearq, "Resultados do Circuito Pi", calculos)
 
     return V1, I1
 
 
-def cirpir(V1, I1, Z, Ya, Yb, nomearq):
+def cirpir(V1, I1, Z, Ya, Yb, nomearq=None):
     """
     # Calcula a tensão V2 e a corrente I2 no terminal receptor de um circuito Pi,
     conhecendo a tensão V1, corrente I1, impedância Z e admitâncias Ya e Yb.
@@ -404,7 +405,7 @@ def cirpir(V1, I1, Z, Ya, Yb, nomearq):
     Z (complex): Impedância em série\n
     Ya (complex): Admitância shunt na entrada\n
     Yb (complex): Admitância shunt na saída\n
-    nomearq (str): Nome do arquivo de saída contendo os resultados
+    nomearq (str, opcional): Nome do arquivo para salvar os resultados. None por padrão.
 
     Retorno:
     (V2, I2) - Tensão e corrente no terminal receptor
@@ -421,19 +422,134 @@ def cirpir(V1, I1, Z, Ya, Yb, nomearq):
     V2, I2 = np.linalg.solve(matriz_abcd, vetor_v1_i1)
 
     # Criar lista de cálculos formatados para salvar no arquivo
-    calculos = [
-        ('Dados de Entrada:', ''),
-        ("V1 = ", format_complex(V1)),
-        ("I1 = ", format_complex(I1)),
-        ("Z  = ", format_complex(Z)),
-        ("Ya = ", format_complex(Ya)),
-        ("Yb = ", format_complex(Yb)),
-        ('\nResultados:', ''),
-        ("V2 = ", format_complex(V2)),
-        ("I2 = ", format_complex(I2))
-    ]
+    if nomearq:
+        calculos = [
+            ('Dados de Entrada:', ''),
+            ("V1 = ", format_complex(V1)),
+            ("I1 = ", format_complex(I1)),
+            ("Z  = ", format_complex(Z)),
+            ("Ya = ", format_complex(Ya)),
+            ("Yb = ", format_complex(Yb)),
+            ('\nResultados:', ''),
+            ("V2 = ", format_complex(V2)),
+            ("I2 = ", format_complex(I2))
+        ]
 
-    # Salvar os resultados no arquivo utilizando a função existente
-    gerar_arquivo_texto(nomearq, "Resultados do Circuito Pi", calculos)
+        # Salvar os resultados no arquivo desejado
+        gerar_arquivo_texto(nomearq, "Resultados do Circuito Pi", calculos)
 
     return V2, I2
+
+
+def delta2estrela(zab, zbc, zca, nomearq=None):
+    """
+    # Converte um circuito delta em estrela.
+
+    Parâmetros:
+    zab, zbc, zca (complex): Impedâncias de fase do circuito delta\n
+    nomearq (str, opcional): Nome do arquivo para salvar os resultados. None por padrão.
+
+    Retorno:
+    Uma tupla (za, zb, zc) com ai impedâncias de fase do circuito estrela
+    """
+
+    # Cálculo das impedâncias de fase do circuito delta
+    zt = zab + zbc + zca
+    za = (zab * zbc) / zt
+    zb = (zbc * zca) / zt
+    zc = (zca * zab) / zt
+
+    # Criar lista de cálculos formatados para salvar no arquivo
+    if nomearq:
+        calculos = [
+            ('Dados de Entrada: ', '(Impedancias de fase em Delta)'),
+            ("Zab = ", format_complex(zab)),
+            ("Zbc = ", format_complex(zbc)),
+            ("Zca = ", format_complex(zca)),
+            ('\nResultados: ', '(Impedancias de fase em Estrela)'),
+            ("Za = ", format_complex(za)),
+            ("Zb = ", format_complex(zb)),
+            ("Zc = ", format_complex(zc))
+        ]
+
+        # Salvar os resultados no arquivo desejado
+        gerar_arquivo_texto(
+            nomearq, "Resultados da Conversão Delta-Estrela", calculos)
+
+    return za, zb, zc
+
+
+def estrela2delta(za, zb, zc, nomearq=None):
+    """
+    # Converte um circuito estrela em delta.
+
+    Parâmetros:
+    za, zb, zc (complex): Impedâncias de fase do circuito estrela\n
+    nomearq (str, opcional): Nome do arquivo para salvar os resultados. None por padrão.
+
+    Retorno:
+    (zab, zbc, zca) - Impedâncias de fase do circuito delta
+    """
+
+    # Cálculo das impedâncias de fase do circuito estrela
+    z_num = za * zb + zb * zc + zc * za
+    zab = z_num / zb
+    zbc = z_num / zc
+    zca = z_num / za
+
+    # Criar lista de cálculos formatados para salvar no arquivo
+    if nomearq:
+        calculos = [
+            ('Dados de Entrada:', '(Impedancias de fase em Estrela)'),
+            ("Za = ", format_complex(za)),
+            ("Zb = ", format_complex(zb)),
+            ("Zc = ", format_complex(zc)),
+            ('\nResultados:', '(Impedancias de fase em Delta)'),
+            ("Zab = ", format_complex(zab)),
+            ("Zbc = ", format_complex(zbc)),
+            ("Zca = ", format_complex(zca))
+        ]
+
+        # Salvar os resultados no arquivo desejado
+        gerar_arquivo_texto(
+            nomearq, "Resultados da Conversão Estrela-Delta", calculos)
+
+    return zab, zbc, zca
+
+
+def queda1f(Ic, DVc, Lc, Vfn, nomearq=None):
+    """
+    # Calcula a seção do condutor (Sc) para um circuito monofásico em cobre.
+
+    Parâmetros:
+    Ic (float): Corrente total do circuito em A.\n
+    DVc (float): Queda de tensão máxima admitida em %.\n
+    Lc (float): Comprimento total do circuito em metros.\n
+    Vfn (float): Tensão fase-neutro em volts.\n
+    nomearq (str, opcional): Nome do arquivo para salvar os resultados. None por padrão.
+
+    Retorno:
+    Sc (float): Seção do condutor em mm².
+    """
+    # Resistividade do cobre em Ω.mm²/m
+    rho = 1 / 56
+
+    # Cálculo da seção do condutor
+    Sc = (200 * rho * (Lc * Ic)) / (DVc * Vfn)
+
+    # Criar lista de cálculos formatados para salvar no arquivo
+    if nomearq:
+        calculos = [
+            ('Dados de Entrada:', ''),
+            ("Ic = ", f"{Ic} A"),
+            ("DVc = ", f"{DVc} %"),
+            ("Lc = ", f"{Lc} m"),
+            ("Vfn = ", f"{Vfn} V"),
+            ("\nSeção do condutor (Sc) = ", f"{Sc:.2f} mm²")
+        ]
+
+        # Salvar os resultados no arquivo desejado
+        gerar_arquivo_texto(
+            nomearq, "Cálculo da Queda de Tensão Monofásica", calculos)
+
+    return Sc
