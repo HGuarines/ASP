@@ -195,10 +195,10 @@ def oper_comp(Z1, form1, op, Z2, form2):
 
     Parâmetros:
     Z1 (complex): O primeiro número complexo.\n
-    form1 (str): A forma do primeiro número complexo ("r: retangular" ou "p: polar").\n
+    form1 (str): A forma do primeiro número complexo ("r: retangular" ou "p: polar, em radianos").\n
     op (str): O operador a ser aplicado ("+", "-", "*", "/").\n
     Z2 (complex): O segundo número complexo.\n
-    form2 (str): A forma do segundo número complexo ("r: retangular" ou "p: polar").
+    form2 (str): A forma do segundo número complexo ("r: retangular" ou "p: polar", em radianos).
 
     Retorno:
     O resultado da operação entre os números complexos fornecidos.
@@ -221,3 +221,76 @@ def oper_comp(Z1, form1, op, Z2, form2):
         raise ValueError("Operação inválida. Use '+', '-', '*' ou '/'.")
     elif form1 not in ["r", "p"] or form2 not in ["r", "p"]:
         raise ValueError("Forma inválida. Use 'r' ou 'p'.")
+
+
+def Qcor_pot(P, FPA, FPN):
+    """
+    # Calcula a potência reativa de correção necessária para compensar o fator de potência de um sistema.
+
+    Parâmetros:
+    P (float): A potência ativa da carga em W.\n
+    FPA (float): O fator de potência antigo do sistema (0 a 1).\n
+    FPN (float): O fator de potência desejado para o sistema (0 a 1).
+
+    Retorno:
+    A potência reativa de correção necessária em VAr.
+    """
+    from math import tan, acos
+
+    FPA = acos(FPA)
+    FPN = acos(FPN)
+    Qc = P * (tan(FPA) - tan(FPN))
+    return Qc
+
+
+def cte_gener(Zpi, Ya, Yb):
+    """
+    # Calcula os parâmetros ABCD para um quadripolo obtido a partir de uma rede PI.
+
+    Parâmetros:
+    Zpi (float ou complexo): Impedância em série na rede PI.\n
+    Ya (float ou complexo): Admitância shunt na entrada.\n
+    Yb (float ou complexo): Admitância shunt na saída.
+
+    Retorno:
+    Uma tupla contendo os parâmetros da matriz de transmissão (A, B, C, D).
+    """
+    A = 1 + Zpi * Ya
+    B = Zpi
+    C = Ya + Yb + Zpi * Ya * Yb
+    D = 1 + Zpi * Yb
+
+    return A, B, C, D
+
+
+def format_complex(c, form='r'):
+    """
+    # Formata um número complexo em uma string legível.
+
+    Parâmetros:
+    c (complex): O número complexo a ser formatado.
+    form (str): A forma do número complexo ('r' para retangular, 'p' para polar). Padrão é 'r'.
+
+    Retorno:
+    Uma string representando o número complexo no formato "a + bj" ou "a - bj" para retangular,
+    ou "r ∠ θ°" para polar.
+    """
+    from math import degrees
+    from cmath import polar
+
+    if isinstance(c, tuple):  # Se já for uma tupla, não precisa chamar polar()
+        r, theta = c
+    elif isinstance(c, complex):  # Se for um número complexo, converta
+        r, theta = polar(c)
+    else:
+        raise TypeError(
+            "Entrada inválida: deve ser um número complexo ou uma tupla (módulo, fase).")
+
+    if form == 'r':
+        return f'{c.real:.2f} {"+" if c.imag >= 0 else "-"} {abs(c.imag):.2f}j'
+    elif form == 'p':
+        theta = degrees(theta)  # Converter radianos para graus
+        return f'{r:.2f} ∠ {theta:.2f}°'
+    else:
+        raise ValueError(
+            "Forma inválida. Use 'r' para retangular ou 'p' para polar.")

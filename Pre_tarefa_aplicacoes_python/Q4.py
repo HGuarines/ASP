@@ -10,8 +10,8 @@ Z2 = 3 + 4j
 Zeq = asp.imp_serie(Z1, Z2)
 
 rsp4 = [('4.\n', 'Dados:'),
-        ('Z1 = ', f'{Z1} Ω'),
-        ('Z2 = ', f'{Z2} Ω'),
-        ('\nA impedância equivalente em série é:\nZeq = ', f'{Zeq} Ω')]
+        ('Z1 = ', f'{asp.format_complex(Z1)} Ω'),
+        ('Z2 = ', f'{asp.format_complex(Z2)} Ω'),
+        ('\nA impedância equivalente em série é:\nZeq = ', f'{asp.format_complex(Zeq)} Ω')]
 
 asp.gerar_arquivo_texto('Q4.txt', 'APLICAÇÕES PYTHON', rsp4)

@@ -16,17 +16,17 @@ Zeq_mult = asp.oper_comp(Z1, 'r', '*', Z2_pol, 'p')
 Zeq_div = asp.oper_comp(Z2, "r", "/", Z1_pol, "p")
 
 rsp6 = [('6.\n', 'Dados:'),
-        ('Z1 = ', f'{Z1} Ω'),
-        ('Z2 = ', f'{Z2} Ω'),
-        ('Z3 = ', f'{Z1_pol[0]:.1f} ∠ {np.degrees(Z1_pol[1]):.1f}° Ω'),
-        ('Z4 = ', f'{Z2_pol[0]:.1f} ∠ {np.degrees(Z2_pol[1]):.1f}° Ω'),
+        ('Z1 = ', asp.format_complex(Z1, 'r')),
+        ('Z2 = ', asp.format_complex(Z2, 'r')),
+        ('Z3 = ', asp.format_complex(Z1_pol, 'p')),
+        ('Z4 = ', asp.format_complex(Z2_pol, 'p')),
         ('\nA soma dos números complexos em retangular é:\nZeq = Z1 + Z2 = ',
-         f'{Zeq_som} Ω'),
+         asp.format_complex(Zeq_som, 'r')),
         ('\nA subtração dos números complexos em polar é:\nZeq = Z3 - Z4 = ',
-         f'{Zeq_sub[0]:.1f} ∠ {np.degrees(Zeq_sub[1]):.1f}° Ω'),
+         asp.format_complex(Zeq_sub, 'p')),
         ('\nA multiplicaçào de um número complexo em retangular e outro em polar é:\nZeq = Z1 * Z4 = ',
-         f'{np.round(Zeq_mult, 2)} Ω'),
-        ('\nE a divisão dos números complexos em retangular e outro em polar é:\nZeq = Z2 / Z3 = ', f'{np.round(Zeq_div, 2)} Ω')]
+         asp.format_complex(Zeq_mult, 'r')),
+        ('\nE a divisão dos números complexos em retangular e outro em polar é:\nZeq = Z2 / Z3 = ', asp.format_complex(Zeq_div, 'r'))]
 
 
 asp.gerar_arquivo_texto('Q6.txt', 'APLICAÇÕES PYTHON', rsp6)

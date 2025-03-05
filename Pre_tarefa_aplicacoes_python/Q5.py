@@ -11,8 +11,8 @@ Z2 = 3 + 4j
 Zeq = asp.imp_paral(Z1, Z2)
 
 rsp5 = [('5.\n', 'Dados:'),
-        ('Z1 = ', f'{Z1} Ω'),
-        ('Z2 = ', f'{Z2} Ω'),
-        ('\nA impedância equivalente em paralelo é:\nZeq = ', f'{np.round(Zeq, 2)} Ω')]
+        ('Z1 = ', f'{asp.format_complex(Z1)} Ω'),
+        ('Z2 = ', f'{asp.format_complex(Z2)} Ω'),
+        ('\nA impedância equivalente em paralelo é:\nZeq = ', f'{asp.format_complex(np.round(Zeq, 2))} Ω')]
 
 asp.gerar_arquivo_texto('Q5.txt', 'APLICAÇÕES PYTHON', rsp5)
