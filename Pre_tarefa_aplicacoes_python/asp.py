@@ -16,7 +16,7 @@ def gerar_arquivo_texto(nome_arquivo, titulo, calculos):
         ('b = 10 - 4', 10 - 4),
         ('c = 7 * 2', 7 * 2),
         ('d = 15 / 3', 15 / 3),
-        ('e = 15 // 2', 15 // 2),   
+        ('e = 15 // 2', 15 // 2),
         ('g = 2 ** 3', 2 ** 3)
     ]
 
@@ -287,10 +287,153 @@ def format_complex(c, form='r'):
             "Entrada inválida: deve ser um número complexo ou uma tupla (módulo, fase).")
 
     if form == 'r':
-        return f'{c.real:.2f} {"+" if c.imag >= 0 else "-"} {abs(c.imag):.2f}j'
+        real_part = f'{c.real:.2f}' if c.real != 0 else ''
+        imag_part = f'{abs(c.imag):.2f}j' if c.imag != 0 else ''
+        if c.imag > 0 and c.real != 0:
+            imag_part = f'+ {imag_part}'
+        elif c.imag < 0:
+            imag_part = f'- {imag_part}'
+        if real_part and imag_part:
+            return f'{real_part} {imag_part}'
+        elif real_part:
+            return real_part
+        elif imag_part:
+            return imag_part
+        else:
+            return '0'
     elif form == 'p':
         theta = degrees(theta)  # Converter radianos para graus
         return f'{r:.2f} ∠ {theta:.2f}°'
     else:
         raise ValueError(
             "Forma inválida. Use 'r' para retangular ou 'p' para polar.")
+
+
+def quad_casc(A1, B1, C1, D1, A2, B2, C2, D2):
+    """
+    # Calcula os parâmetros ABCD de um quadripolo obtido pela cascata de dois quadripolos.
+
+    Parâmetros:
+    A1, B1, C1, D1: Parâmetros do primeiro quadripolo.\n
+    A2, B2, C2, D2: Parâmetros do segundo quadripolo.
+
+    Retorno:
+    Uma tupla contendo os parâmetros da matriz de transmissão (A, B, C, D).
+    """
+    A = A1 * A2 + B1 * C2
+    B = A1 * B2 + B1 * D2
+    C = C1 * A2 + D1 * C2
+    D = C1 * B2 + D1 * D2
+
+    return A, B, C, D
+
+
+def quad_par(A1, B1, C1, D1, A2, B2, C2, D2):
+    """
+    # Calcula os parâmetros ABCD de um quadripolo obtido pela paralelo de dois quadripolos.
+
+    Parâmetros:
+    A1, B1, C1, D1: Parâmetros do primeiro quadripolo.\n
+    A2, B2, C2, D2: Parâmetros do segundo quadripolo.
+
+    Retorno:
+    Uma tupla contendo os parâmetros da matriz de transmissão (A, B, C, D).
+    """
+    A = A1 + A2
+    B = B1 + B2
+    C = C1 + C2
+    D = D1 + D2
+
+    return A, B, C, D
+
+
+def cirpi(V2, I2, Z, Ya, Yb, nomearq):
+    """
+    # Calcula a tensão V1 e a corrente I1 no terminal transmissor de um circuito Pi,
+    conhecendo a tensão V2, corrente I2, impedância Z e admitâncias Ya e Yb.
+
+    Parâmetros:
+    V2 (complex): Tensão no terminal receptor\n
+    I2 (complex): Corrente no terminal receptor\n
+    Z (complex): Impedância em série\n
+    Ya (complex): Admitância shunt na entrada\n
+    Yb (complex): Admitância shunt na saída\n
+    nomearq (str): Nome do arquivo de saída contendo os resultados
+
+    Retorno:
+    (V1, I1) - Tensão e corrente no terminal transmissor
+    """
+    import numpy as np
+
+    # Utilizando a função existente para calcular os parâmetros ABCD
+    A, B, C, D = cte_gener(Z, Ya, Yb)
+
+    # Resolvendo para V1 e I1 usando a equação matricial
+    matriz_abcd = np.array([[A, B], [C, D]])
+    vetor_v2_i2 = np.array([V2, I2])
+    V1, I1 = np.dot(matriz_abcd, vetor_v2_i2)
+
+    # Criar lista de cálculos formatados para salvar no arquivo
+    calculos = [
+        ('Dados de Entrada:', ''),
+        ("V2 = ", format_complex(V2)),
+        ("I2 = ", format_complex(I2)),
+        ("Z  = ", format_complex(Z)),
+        ("Ya = ", format_complex(Ya)),
+        ("Yb = ", format_complex(Yb)),
+        ('\nResultados:', ''),
+        ("V1 = ", format_complex(V1)),
+        ("I1 = ", format_complex(I1))
+    ]
+
+    # Salvar os resultados no arquivo utilizando a função existente
+    gerar_arquivo_texto(nomearq, "Resultados do Circuito Pi", calculos)
+
+    return V1, I1
+
+
+def cirpir(V1, I1, Z, Ya, Yb, nomearq):
+    """
+    # Calcula a tensão V2 e a corrente I2 no terminal receptor de um circuito Pi,
+    conhecendo a tensão V1, corrente I1, impedância Z e admitâncias Ya e Yb.
+
+    Parâmetros:
+    V1 (complex): T
+    ensão no terminal transmissor\n
+    I1 (complex): Corrente no terminal transmissor\n
+    Z (complex): Impedância em série\n
+    Ya (complex): Admitância shunt na entrada\n
+    Yb (complex): Admitância shunt na saída\n
+    nomearq (str): Nome do arquivo de saída contendo os resultados
+
+    Retorno:
+    (V2, I2) - Tensão e corrente no terminal receptor
+    """
+
+    import numpy as np
+
+    # Utilizando a função existente para calcular os parâmetros ABCD
+    A, B, C, D = cte_gener(Z, Ya, Yb)
+
+    # Resolvendo para V2 e I2 usando a equação matricial
+    matriz_abcd = np.array([[A, B], [C, D]])
+    vetor_v1_i1 = np.array([V1, I1])
+    V2, I2 = np.linalg.solve(matriz_abcd, vetor_v1_i1)
+
+    # Criar lista de cálculos formatados para salvar no arquivo
+    calculos = [
+        ('Dados de Entrada:', ''),
+        ("V1 = ", format_complex(V1)),
+        ("I1 = ", format_complex(I1)),
+        ("Z  = ", format_complex(Z)),
+        ("Ya = ", format_complex(Ya)),
+        ("Yb = ", format_complex(Yb)),
+        ('\nResultados:', ''),
+        ("V2 = ", format_complex(V2)),
+        ("I2 = ", format_complex(I2))
+    ]
+
+    # Salvar os resultados no arquivo utilizando a função existente
+    gerar_arquivo_texto(nomearq, "Resultados do Circuito Pi", calculos)
+
+    return V2, I2
