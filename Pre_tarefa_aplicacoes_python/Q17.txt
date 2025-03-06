@@ -1,16 +1,17 @@
 
 *********************************************
-          Cálculo da Queda de Tensão Monofásica          
+          Cálculo da Tensão na Fonte          
           Henrique B Guarines                    
 
 *********************************************
 
 Dados de Entrada:
-Ic = 10 A
-DVc = 5 %
-Lc = 0.1 m
-Vfn = 100 V
+Vc = 220.00 ∠ -30.00°
+Z = 5.00 + 2.00j
+Sc = 5000.00 + 2000.00j
 
-Seção do condutor (Sc) = 0.01 mm²
+Resultados:
+Vf = 307.86 ∠ -8.23°
+I = 24.48 ∠ 8.20°
 
 *********************************************

@@ -5,7 +5,7 @@ def gerar_arquivo_texto(nome_arquivo, titulo, calculos):
     """
     # Adiciona ou gera um arquivo de texto formatado com título, autor e cálculos fornecidos, evitando duplicações.
 
-    Parâmetros:
+    **Parâmetros:**\n
     nome_arquivo (str): O nome do arquivo de saída.\n
     titulo (str): O título a ser exibido no arquivo.\n
     calculos (lista de tuplas): Uma lista onde cada tupla contém uma expressão e seu resultado.
@@ -58,11 +58,11 @@ def ret2pol(cplx, unidade='r'):
     """
     # Converte um número complexo retangular para forma polar.
 
-    Parâmetros:
+    **Parâmetros:**\n
     cplx (complex): O número complexo a ser convertido. (a + jb)
     unidade (str): A unidade do ângulo ('r' para radianos, 'g' para graus). Padrão é 'r'.
 
-    Retorno:
+    **Retorno:**\n
     Uma tupla contendo o módulo e o argumento do número complexo fornecido. (r, phi)
     """
     from cmath import polar
@@ -80,12 +80,12 @@ def pol2ret(r, phi, unidade='r'):
     """
     # Converte um número complexo polar para forma retangular.
 
-    Parâmetros:
+    **Parâmetros:**\n
     r (float): O módulo do número complexo.\n
     phi (float): O argumento do número complexo.\n
     unidade (str): A unidade do ângulo ('r' para radianos, 'g' para graus). Padrão é 'r'.
 
-    Retorno:
+    **Retorno:**\n
     O número complexo na forma retangular. (a + jb)
     """
     from cmath import rect
@@ -101,11 +101,11 @@ def pot_comp1f(V, I):
     """
     # Calcula a potência complexa em um circuito monofásico.
 
-    Parâmetros:\n
+    **Parâmetros:**\n
     V (a + jb): A tensão complexa no circuito.\n
     I (a + jb): A corrente complexa no circuito.
 
-    Retorno:
+    **Retorno:**\n
     A potência complexa no circuito. (P + jQ)
     """
     S = V * I.conjugate()
@@ -116,11 +116,11 @@ def pot_comp3f(Va, Ia, Vb, Ib, Vc, Ic):
     """
     # Calcula a potência complexa trifásica S.
 
-    Parâmetros:\n
+    **Parâmetros:**\n
     Va, Vb, Vc: Tensões de fase (números complexos)\n
     Ia, Ib, Ic: Correntes de fase (números complexos)
 
-    Retorna:\n
+    **Retorno:**\n
     Potência complexa total S.
     """
     from numpy import conj
@@ -165,11 +165,11 @@ def imp_serie(Z1, Z2):
     """
     # Calcula a impedância equivalente de dois elementos em série.
 
-    Parâmetros:
+    **Parâmetros:**\n
     Z1 (a + jb): A primeira impedância.\n
     Z2 (a + jb): A segunda impedância.
 
-    Retorno:
+    **Retorno:**\n
     A impedância equivalente dos dois elementos em série. (a + jb)
     """
     return Z1 + Z2
@@ -179,11 +179,11 @@ def imp_paral(Z1, Z2):
     """
     # Calcula a impedância equivalente de dois elementos em paralelo.
 
-    Parâmetros:
+    **Parâmetros:**\n
     Z1 (a + jb): A primeira impedância.\n
     Z2 (a + jb): A segunda impedância.
 
-    Retorno:
+    **Retorno:**\n
     A impedância equivalente dos dois elementos em paralelo. (a + jb)
     """
     return (Z1 * Z2) / (Z1 + Z2)
@@ -193,14 +193,14 @@ def oper_comp(Z1, form1, op, Z2, form2):
     """
     # Realiza operações com números complexos.
 
-    Parâmetros:
+    **Parâmetros:**\n
     Z1 (complex): O primeiro número complexo.\n
     form1 (str): A forma do primeiro número complexo ("r: retangular" ou "p: polar, em radianos").\n
     op (str): O operador a ser aplicado ("+", "-", "*", "/").\n
     Z2 (complex): O segundo número complexo.\n
     form2 (str): A forma do segundo número complexo ("r: retangular" ou "p: polar", em radianos).
 
-    Retorno:
+    **Retorno:**\n
     O resultado da operação entre os números complexos fornecidos.
     """
 
@@ -227,12 +227,12 @@ def Qcor_pot(P, FPA, FPN):
     """
     # Calcula a potência reativa de correção necessária para compensar o fator de potência de um sistema.
 
-    Parâmetros:
+    **Parâmetros:**\n
     P (float): A potência ativa da carga em W.\n
     FPA (float): O fator de potência antigo do sistema (0 a 1).\n
     FPN (float): O fator de potência desejado para o sistema (0 a 1).
 
-    Retorno:
+    **Retorno:**\n
     A potência reativa de correção necessária em VAr.
     """
     from math import tan, acos
@@ -247,12 +247,12 @@ def cte_gener(Zpi, Ya, Yb):
     """
     # Calcula os parâmetros ABCD para um quadripolo obtido a partir de uma rede PI.
 
-    Parâmetros:
+    **Parâmetros:**\n
     Zpi (float ou complexo): Impedância em série na rede PI.\n
     Ya (float ou complexo): Admitância shunt na entrada.\n
     Yb (float ou complexo): Admitância shunt na saída.
 
-    Retorno:
+    **Retorno:**\n
     Uma tupla contendo os parâmetros da matriz de transmissão (A, B, C, D).
     """
     A = 1 + Zpi * Ya
@@ -267,11 +267,11 @@ def format_complex(c, form='r'):
     """
     # Formata um número complexo em uma string legível.
 
-    Parâmetros:
-    c (complex): O número complexo a ser formatado.
-    form (str): A forma do número complexo ('r' para retangular, 'p' para polar). Padrão é 'r'.
+    **Parâmetros:**\n
+    c (complex): O número complexo a ser formatado.\n
+    form (str): A forma do número complexo ('r' para retangular, 'p' para polar). Padrão é 'r'.\n
 
-    Retorno:
+    **Retorno:**\n
     Uma string representando o número complexo no formato "a + bj" ou "a - bj" para retangular,
     ou "r ∠ θ°" para polar.
     """
@@ -313,11 +313,11 @@ def quad_casc(A1, B1, C1, D1, A2, B2, C2, D2):
     """
     # Calcula os parâmetros ABCD de um quadripolo obtido pela cascata de dois quadripolos.
 
-    Parâmetros:
+    **Parâmetros:**\n
     A1, B1, C1, D1: Parâmetros do primeiro quadripolo.\n
     A2, B2, C2, D2: Parâmetros do segundo quadripolo.
 
-    Retorno:
+    **Retorno:**\n
     Uma tupla contendo os parâmetros da matriz de transmissão (A, B, C, D).
     """
     A = A1 * A2 + B1 * C2
@@ -332,11 +332,11 @@ def quad_par(A1, B1, C1, D1, A2, B2, C, D2):
     """
     # Calcula os parâmetros ABCD de um quadripolo obtido pela paralelo de dois quadripolos.
 
-    Parâmetros:
+    **Parâmetros:**\n
     A1, B1, C1, D1: Parâmetros do primeiro quadripolo.\n
     A2, B2, C2, D2: Parâmetros do segundo quadripolo.
 
-    Retorno:
+    **Retorno:**\n
     Uma tupla contendo os parâmetros da matriz de transmissão (A, B, C, D).
     """
     A = A1 + A2
@@ -349,10 +349,9 @@ def quad_par(A1, B1, C1, D1, A2, B2, C, D2):
 
 def cirpi(V2, I2, Z, Ya, Yb, nomearq=None):
     """
-    # Calcula a tensão V1 e a corrente I1 no terminal transmissor de um circuito Pi,
-    conhecendo a tensão V2, corrente I2, impedância Z e admitâncias Ya e Yb.
+    # Calcula a tensão V1 e a corrente I1 no terminal transmissor de um circuito Pi, conhecendo a tensão V2, corrente I2, impedância Z e admitâncias Ya e Yb.
 
-    Parâmetros:
+    **Parâmetros:**\n
     V2 (complex): Tensão no terminal receptor\n
     I2 (complex): Corrente no terminal receptor\n
     Z (complex): Impedância em série\n
@@ -360,7 +359,7 @@ def cirpi(V2, I2, Z, Ya, Yb, nomearq=None):
     Yb (complex): Admitância shunt na saída\n
     nomearq (str, opcional): Nome do arquivo para salvar os resultados. None por padrão.
 
-    Retorno:
+    **Retorno:**\n
     (V1, I1) - Tensão e corrente no terminal transmissor
     """
     import numpy as np
@@ -395,11 +394,10 @@ def cirpi(V2, I2, Z, Ya, Yb, nomearq=None):
 
 def cirpir(V1, I1, Z, Ya, Yb, nomearq=None):
     """
-    # Calcula a tensão V2 e a corrente I2 no terminal receptor de um circuito Pi,
-    conhecendo a tensão V1, corrente I1, impedância Z e admitâncias Ya e Yb.
+    # Calcula a tensão V2 e a corrente I2 no terminal receptor de um circuito Pi, conhecendo a tensão V1, corrente I1, impedância Z e admitâncias Ya e Yb.
 
-    Parâmetros:
-    V1 (complex): T
+    **Parâmetros:**\n
+    V1 (complex): T\n
     ensão no terminal transmissor\n
     I1 (complex): Corrente no terminal transmissor\n
     Z (complex): Impedância em série\n
@@ -407,7 +405,7 @@ def cirpir(V1, I1, Z, Ya, Yb, nomearq=None):
     Yb (complex): Admitância shunt na saída\n
     nomearq (str, opcional): Nome do arquivo para salvar os resultados. None por padrão.
 
-    Retorno:
+    **Retorno:**\n
     (V2, I2) - Tensão e corrente no terminal receptor
     """
 
@@ -445,11 +443,11 @@ def delta2estrela(zab, zbc, zca, nomearq=None):
     """
     # Converte um circuito delta em estrela.
 
-    Parâmetros:
+    **Parâmetros:**\n
     zab, zbc, zca (complex): Impedâncias de fase do circuito delta\n
     nomearq (str, opcional): Nome do arquivo para salvar os resultados. None por padrão.
 
-    Retorno:
+    **Retorno:**\n
     Uma tupla (za, zb, zc) com ai impedâncias de fase do circuito estrela
     """
 
@@ -481,13 +479,13 @@ def delta2estrela(zab, zbc, zca, nomearq=None):
 
 def estrela2delta(za, zb, zc, nomearq=None):
     """
-    # Converte um circuito estrela em delta.
+    # Converte um circuito estrela em delta.\n
 
-    Parâmetros:
+    **Parâmetros:**\n
     za, zb, zc (complex): Impedâncias de fase do circuito estrela\n
     nomearq (str, opcional): Nome do arquivo para salvar os resultados. None por padrão.
 
-    Retorno:
+    **Retorno:**\n
     (zab, zbc, zca) - Impedâncias de fase do circuito delta
     """
 
@@ -521,14 +519,14 @@ def queda1f(Ic, DVc, Lc, Vfn, nomearq=None):
     """
     # Calcula a seção do condutor (Sc) para um circuito monofásico em cobre.
 
-    Parâmetros:
+    **Parâmetros:**\n
     Ic (float): Corrente total do circuito em A.\n
     DVc (float): Queda de tensão máxima admitida em %.\n
     Lc (float): Comprimento total do circuito em metros.\n
     Vfn (float): Tensão fase-neutro em volts.\n
     nomearq (str, opcional): Nome do arquivo para salvar os resultados. None por padrão.
 
-    Retorno:
+    **Retorno:**\n
     Sc (float): Seção do condutor em mm².
     """
     # Resistividade do cobre em Ω.mm²/m
@@ -553,3 +551,140 @@ def queda1f(Ic, DVc, Lc, Vfn, nomearq=None):
             nomearq, "Cálculo da Queda de Tensão Monofásica", calculos)
 
     return Sc
+
+
+def queda3f(Ic, DVc, Lc, Vfn, nomearq=None):
+    """
+    # Calcula a seção do condutor (Sc) para um circuito trifásico em cobre.
+
+    **Parâmetros:**\n
+    Ic (float): Corrente total do circuito em A.\n
+    DVc (float): Queda de tensão máxima admitida em %.\n
+    Lc (float): Comprimento total do circuito em metros.\n
+    Vfn (float): Tensão fase-neutro em volts.\n
+    nomearq (str, opcional): Nome do arquivo para salvar os resultados. None por padrão.
+
+    **Retorno:**\n
+    Sc (float): Seção do condutor em mm².
+    """
+    # Resistividade do cobre em Ω.mm²/m
+    rho = 1 / 56
+
+    # Cálculo da seção do condutor
+    Sc = (173.2 * rho * (Lc * Ic)) / (DVc * Vfn)
+
+    # Criar lista de cálculos formatados para salvar no arquivo
+    if nomearq:
+        calculos = [
+            ('Dados de Entrada:', ''),
+            ("Ic = ", f"{Ic} A"),
+            ("DVc = ", f"{DVc} %"),
+            ("Lc = ", f"{Lc} m"),
+            ("Vfn = ", f"{Vfn} V"),
+            ("\nSeção do condutor (Sc) = ", f"{Sc:.2f} mm²")
+        ]
+
+        # Salvar os resultados no arquivo desejado
+        gerar_arquivo_texto(
+            nomearq, "Cálculo da Queda de Tensão Trifásica", calculos)
+
+    return Sc
+
+
+def vfonte(Vc, Z, Sc, nomearq=None):
+    """
+    # Calcula a tensão na fonte e a corrente do alimentador.
+
+    **Parâmetros:**\n
+    Vc (tupla): Tensão na carga (módulo e fase, em graus).\n
+    Z (tupla): Impedância do alimentador (R e X, em ohms).\n
+    Sc (tupla): Potência complexa da carga (Pc e Qc, em VA).\n
+    nomearq (str, opcional): Nome do arquivo para salvar os resultados. None por padrão.
+
+    **Retorno:**\n
+    (Vf, I) - Tensão na fonte e corrente do alimentador.
+    """
+    # Converter entrada para forma retangular
+    Vc_rect = pol2ret(*Vc, unidade='g')
+    Z_rect = complex(*Z)  # Impedância já está em forma retangular
+    Sc_rect = complex(*Sc)  # Potência complexa
+
+    # Calcular corrente no alimentador
+    I = Sc_rect.conjugate() / Vc_rect  # I = S*/V
+
+    # Calcular tensão na fonte
+    Vf_rect = Vc_rect + I * Z_rect
+
+    # Converter resultados para polar
+    Vf_polar = ret2pol(Vf_rect, unidade='g')
+    I_polar = ret2pol(I, unidade='g')
+
+    # Se nomearq for fornecido, salvar os resultados no arquivo
+    if nomearq:
+        calculos = [
+            ('Dados de Entrada:', ''),
+            ("Vc = ", format_complex(Vc_rect, 'p')),
+            ("Z = ", format_complex(Z_rect, 'r')),
+            ("Sc = ", format_complex(Sc_rect, 'r')),
+            ('\nResultados:', ''),
+            ("Vf = ", format_complex(Vf_rect, 'p')),
+            ("I = ", format_complex(I, 'p'))
+        ]
+
+        gerar_arquivo_texto(nomearq, "Cálculo da Tensão na Fonte", calculos)
+
+    return Vf_polar, I_polar
+
+
+def vfontepi(Vc, Z, Ya, Yb, Sc, nomearq=None):
+    """
+    # Calcula a tensão na fonte e a corrente do alimentador para um circuito Pi.
+
+    **Parâmetros:**\n
+    Vc (tupla): Tensão na carga (módulo e fase, em graus).\n
+    Z (tupla): Impedância do alimentador (R e X, em ohms).\n
+    Ya (tupla): Admitância no lado da fonte (G e B, em S).\n
+    Yb (tupla): Admitância no lado da carga (G e B, em S).\n
+    Sc (tupla): Potência complexa da carga (Pc e Qc, em VA).\n
+    nomearq (str, opcional): Nome do arquivo de saída. Padrão é None.
+
+    **Retorno:**\n
+    (Vf, I) - Tensão na fonte e corrente do alimentador.
+    """
+    # Converter entradas para forma retangular
+    Vc_ret = pol2ret(*Vc, unidade='g') if isinstance(Vc, tuple) else Vc
+    Z_ret = complex(*Z) if isinstance(Z, tuple) else Z
+    Ya_ret = complex(*Ya) if isinstance(Ya, tuple) else Ya
+    Yb_ret = complex(*Yb) if isinstance(Yb, tuple) else Yb
+    Sc_ret = complex(*Sc) if isinstance(Sc, tuple) else Sc
+
+    # Calcular corrente no alimentador
+    I = Sc_ret.conjugate() / Vc_ret  # I = S*/V
+
+    # Determinar admitância total
+    Y_total = Ya_ret + Yb_ret
+
+    # Calcular tensão na fonte considerando a impedância do alimentador
+    Vf_ret = Vc_ret + (I * Z_ret) + (I / Y_total)
+
+    # Converter resultados para forma polar
+    Vf_polar = ret2pol(Vf_ret, unidade='g')
+    I_polar = ret2pol(I, unidade='g')
+
+    # Salvar os resultados no arquivo se nomearq for fornecido
+    if nomearq:
+        calculos = [
+            ('Dados de Entrada:', ''),
+            ("Vc = ", format_complex(Vc_ret, 'p')),
+            ("Z = ", format_complex(Z_ret, 'r')),
+            ("Ya = ", format_complex(Ya_ret, 'r')),
+            ("Yb = ", format_complex(Yb_ret, 'r')),
+            ("Sc = ", format_complex(Sc_ret, 'r')),
+            ('\nResultados:', ''),
+            ("Vf = ", format_complex(Vf_ret, 'p')),
+            ("I = ", format_complex(I, 'p'))
+        ]
+        gerar_arquivo_texto(
+            nomearq, "Cálculo da Tensão na Fonte para Circuito Pi", calculos)
+
+    return Vf_polar, I_polar
