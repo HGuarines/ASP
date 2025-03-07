@@ -263,13 +263,14 @@ def cte_gener(Zpi, Ya, Yb):
     return A, B, C, D
 
 
-def format_complex(c, form='r'):
+def format_complex(c, form='r', precisao=2):
     """
     # Formata um número complexo em uma string legível.
 
     **Parâmetros:**\n
     c (complex): O número complexo a ser formatado.\n
     form (str): A forma do número complexo ('r' para retangular, 'p' para polar). Padrão é 'r'.\n
+    precisao (int): O número de casas decimais para arredondamento. Padrão é 2.\n
 
     **Retorno:**\n
     Uma string representando o número complexo no formato "a + bj" ou "a - bj" para retangular,
@@ -287,8 +288,8 @@ def format_complex(c, form='r'):
             "Entrada inválida: deve ser um número complexo ou uma tupla (módulo, fase).")
 
     if form == 'r':
-        parte_real = f'{c.real:.2f}' if c.real != 0 else ''
-        parte_imaginaria = f'{abs(c.imag):.2f}j' if c.imag != 0 else ''
+        parte_real = f'{c.real:.{precisao}f}' if c.real != 0 else ''
+        parte_imaginaria = f'{abs(c.imag):.{precisao}f}j' if c.imag != 0 else ''
         if c.imag > 0 and c.real != 0:
             parte_imaginaria = f'+ {parte_imaginaria}'
         elif c.imag < 0:
@@ -303,7 +304,7 @@ def format_complex(c, form='r'):
             return '0'
     elif form == 'p':
         theta = degrees(theta)  # Converter radianos para graus
-        return f'{r:.2f} ∠ {theta:.2f}°'
+        return f'{r:.{precisao}f} ∠ {theta:.{precisao}f}°'
     else:
         raise ValueError(
             "Forma inválida. Use 'r' para retangular ou 'p' para polar.")
@@ -688,3 +689,49 @@ def vfontepi(Vc, Z, Ya, Yb, Sc, nomearq=None):
             nomearq, "Cálculo da Tensão na Fonte para Circuito Pi", calculos)
 
     return Vf_polar, I_polar
+
+
+def impcabo(secao_bt, nomearq=None):
+    """
+    # Calcula a impedância do cabo de cobre com isolação de PVC em Ω/km.
+
+    **Parâmetros:**\n
+    secao_bt (float): Seção do condutor em mm².\n
+    nomearq (str, opcional): Nome do arquivo para salvar os resultados. None por padrão.
+
+    **Retorno:**\n
+    A impedância do cabo de cobre em Ω/km.
+    """
+    # Tabela de resistência e reatância (em mΩ/m)
+    tabela_cabos = {
+        1: (22.1, 0.176), 1.5: (14.8, 0.168), 2.5: (8.91, 0.155),
+        4: (5.57, 0.143), 6: (3.71, 0.135), 10: (2.24, 0.119),
+        16: (1.41, 0.112), 25: (0.880, 0.106), 35: (0.841, 0.101),
+        50: (0.473, 0.101), 70: (0.328, 0.0965), 95: (0.236, 0.0975),
+        120: (0.188, 0.0939), 150: (0.153, 0.0928), 185: (0.123, 0.0908),
+        240: (0.0943, 0.0902), 300: (0.0761, 0.0895), 400: (0.0607, 0.0876),
+        500: (0.0496, 0.0867), 630: (0.0402, 0.0865)
+    }
+
+    # Verificar se a seção nominal está na tabela
+    if secao_bt not in tabela_cabos:
+        raise ValueError(
+            f"Seção nominal não encontrada na tabela. Favor selecionar entre: {', '.join(map(str, tabela_cabos.keys()))} mm².")
+
+    # Obter resistência e reatância
+    resistencia, reatancia = tabela_cabos[secao_bt]
+    impedancia = complex(resistencia, reatancia)  # Convertendo para Ω/km
+
+    # Criar lista de cálculos formatados para salvar no arquivo
+    if nomearq:
+        calculos = [
+            ("Seção do condutor (Sc) = ", f"{secao_bt} mm²"),
+            ('Impedância do cabo = ',
+             f"{format_complex(impedancia, 'r', 3)} Ω/km")
+        ]
+
+        # Salvar os resultados no arquivo desejado
+        gerar_arquivo_texto(
+            nomearq, "Cálculo da Impedância do Cabo de Cobre", calculos)
+
+    return impedancia
