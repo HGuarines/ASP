@@ -268,13 +268,13 @@ def format_complex(c, form='r', precisao=2):
     # Formata um número complexo em uma string legível.
 
     **Parâmetros:**\n
-    c (complex): O número complexo a ser formatado.\n
-    form (str): A forma do número complexo ('r' para retangular, 'p' para polar). Padrão é 'r'.\n
+    c (complex): O número complexo a ser formatado. **imput do angulo sempre em radianos**\n
+    form (str): A forma do número complexo ('r' para retangular, 'p' para polar, 'e' para exponencial). Padrão é 'r'.\n
     precisao (int): O número de casas decimais para arredondamento. Padrão é 2.\n
 
     **Retorno:**\n
     Uma string representando o número complexo no formato "a + bj" ou "a - bj" para retangular,
-    ou "r ∠ θ°" para polar.
+    "r ∠ θ°" para polar, ou "r * e^(jθ)" para exponencial.
     """
     from math import degrees
     from cmath import polar
@@ -305,9 +305,11 @@ def format_complex(c, form='r', precisao=2):
     elif form == 'p':
         theta = degrees(theta)  # Converter radianos para graus
         return f'{r:.{precisao}f} ∠ {theta:.{precisao}f}°'
+    elif form == 'e':
+        return f'{r:.{precisao}f}*e^{theta:.{precisao}f}j'
     else:
         raise ValueError(
-            "Forma inválida. Use 'r' para retangular ou 'p' para polar.")
+            "Forma inválida. Use 'r' para retangular, 'p' para polar ou 'e' para exponencial.")
 
 
 def quad_casc(A1, B1, C1, D1, A2, B2, C2, D2):
@@ -735,3 +737,36 @@ def impcabo(secao_bt, nomearq=None):
             nomearq, "Cálculo da Impedância do Cabo de Cobre", calculos)
 
     return impedancia
+
+
+def inst2fasor(amplitude, angulo, tipo='cos', unidade='g'):
+    """
+    # Converte uma corrente ou tensão instantânea para fasor na forma retangular e polar.
+
+    **Parâmetros:**\n   
+    amplitude (float): Amplitude da corrente.\n
+    angulo (float): Ângulo de fase (em graus, se unidade='g', ou radianos, se unidade='r').\n
+    tipo (str): 'cos' se for baseado no cosseno, 'sin' se for baseado no seno.\n
+    unidade (str): 'g' para graus (default), 'r' para radianos.\n
+
+    **Retorno:**\n
+    tuple: Fasor na forma retangular e polar.
+    """
+    from cmath import rect, polar
+    from math import radians, degrees
+
+    if unidade == 'g':
+        angulo = radians(angulo)  # Converte para radianos se necessário
+
+    if tipo == 'sin':
+        angulo -= radians(90)  # Converte seno para cosseno subtraindo 90°
+
+    # Representação retangular
+    fasor_ret = rect(amplitude, angulo)
+
+    # Representação polar
+    modulo, fase = polar(fasor_ret)
+    if unidade == 'g':
+        fase = degrees(fase)  # Converte de volta para graus
+
+    return fasor_ret, (modulo, fase)
