@@ -161,32 +161,40 @@ def cor_carga(P, V, FP, N=3):
     return I
 
 
-def imp_serie(Z1, Z2):
+def imp_serie(*impedancias):
     """
-    # Calcula a impedância equivalente de dois elementos em série.
+    # Calcula a impedância equivalente de múltiplos elementos em série.
 
     **Parâmetros:**\n
-    Z1 (a + jb): A primeira impedância.\n
-    Z2 (a + jb): A segunda impedância.
+    *impedancias (a + jb): As impedâncias dos elementos.
 
     **Retorno:**\n
-    A impedância equivalente dos dois elementos em série. (a + jb)
+    A impedância equivalente dos elementos em série. (a + jb)
     """
-    return Z1 + Z2
+    return sum(impedancias)
 
 
-def imp_paral(Z1, Z2):
+def imp_paral(*impedancias):
     """
-    # Calcula a impedância equivalente de dois elementos em paralelo.
+    # Calcula a impedância equivalente de múltiplos elementos em paralelo.
 
     **Parâmetros:**\n
-    Z1 (a + jb): A primeira impedância.\n
-    Z2 (a + jb): A segunda impedância.
+    *impedancias (a + jb): As impedâncias dos elementos.
 
     **Retorno:**\n
-    A impedância equivalente dos dois elementos em paralelo. (a + jb)
+    A impedância equivalente dos elementos em paralelo. (a + jb)
     """
-    return (Z1 * Z2) / (Z1 + Z2)
+    from functools import reduce
+
+    if len(impedancias) == 0:
+        raise ValueError("Deve haver pelo menos uma impedância fornecida.")
+
+    # Função auxiliar para calcular a impedância equivalente de dois elementos em paralelo
+    def paralelo(Z1, Z2):
+        return (Z1 * Z2) / (Z1 + Z2)
+
+    # Reduzir a lista de impedâncias usando a função auxiliar
+    return reduce(paralelo, impedancias)
 
 
 def oper_comp(Z1, form1, op, Z2, form2):
@@ -770,3 +778,81 @@ def inst2fasor(amplitude, angulo, tipo='cos', unidade='g'):
         fase = degrees(fase)  # Converte de volta para graus
 
     return fasor_ret, (modulo, fase)
+
+
+def plot_fasor(*fasores, nome_arquivo=None):
+    """
+    # Plota um diagrama fasorial e salva a imagem.
+
+    **Parâmetros:**\n
+    nome_arquivo (str): Nome do arquivo para salvar a imagem do diagrama.\n
+    *fasores (tuplas): Lista de fasores no formato (valor, label).
+
+    **Retorno:**\n
+    Gera e salva um diagrama fasorial com os fasores fornecidos.
+    """
+    import matplotlib.pyplot as plt
+    import random
+
+    plt.figure()
+
+    cores = ["r", "g", "b", "m", "c", "y", "k"]  # Lista de 7 cores fixas
+    random.shuffle(cores)  # Embaralha as cores para garantir variedade
+
+    for (fasor, rotulo), cor in zip(fasores, cores):
+        if fasor:  # Verifica se o fasor não é vazio
+            plt.arrow(0, 0, fasor.real, fasor.imag, head_width=0.5,
+                      head_length=0.5, color=cor, label=rotulo)
+
+    plt.xlim(-15, 15)
+    plt.ylim(-15, 15)
+    plt.axhline(0, color='black', linewidth=0.5)
+    plt.axvline(0, color='black', linewidth=0.5)
+    plt.grid(True, linestyle='--', linewidth=0.5)
+    plt.legend()
+    plt.title("Diagrama Fasorial")
+    plt.xlabel("Parte Real")
+    plt.ylabel("Parte Imaginária")
+
+    # Salvar a imagem se nome_arquivo for fornecido
+    if nome_arquivo:
+        plt.savefig(nome_arquivo)
+        print(f"Diagrama fasorial salvo como {nome_arquivo}")
+    plt.show()
+
+
+def fator_potencia(V=None, I=None, Zeq=None, S=None, P=None, mod_S=None):
+    """
+    # Calcula o fator de potência a partir de diferentes combinações de parâmetros.
+
+    **Parâmetros:**\n
+    V (complex, opcional): Tensão do circuito (número complexo).\n
+    I (complex, opcional): Corrente do circuito (número complexo).\n
+    Zeq (complex, opcional): Impedância equivalente do circuito (número complexo).\n
+    S (complex, opcional): Potência aparente (VA).\n
+    P (float, opcional): Potência ativa (W).\n
+    mod_S (float, opcional): Módulo da potência aparente (VA).\n
+    **Retorno:**\n
+    FP (float): Fator de potência (0 a 1), indicando a eficiência da utilização da potência.
+    """
+    if S is None:
+        if V is not None and I is not None:
+            S = V * I.conjugate()  # Calcula potência aparente se V e I forem fornecidos
+        elif mod_S is not None:
+            S = mod_S  # Usa diretamente o módulo de S, se fornecido
+        else:
+            raise ValueError(
+                "Para calcular o fator de potência sem S, forneça V e I ou o módulo de S.")
+
+    if P is None:
+        if isinstance(S, complex):
+            P = S.real  # Usa a parte real de S como potência ativa se P não for fornecido
+        else:
+            raise ValueError(
+                "Para calcular o fator de potência sem P, forneça P ou um S complexo.")
+
+    if abs(S) == 0:
+        raise ValueError("A potência aparente não pode ser zero.")
+
+    FP = abs(P) / abs(S)
+    return FP
