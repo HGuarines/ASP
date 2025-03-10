@@ -197,15 +197,15 @@ def imp_paral(*impedancias):
     return reduce(paralelo, impedancias)
 
 
-def oper_comp(Z1, form1, op, Z2, form2):
+def oper_comp(c1, form1, op, c2, form2):
     """
     # Realiza operações com números complexos.
 
     **Parâmetros:**\n
-    Z1 (complex): O primeiro número complexo.\n
+    c1 (complex): O primeiro número complexo.\n
     form1 (str): A forma do primeiro número complexo ("r: retangular" ou "p: polar, em radianos").\n
     op (str): O operador a ser aplicado ("+", "-", "*", "/").\n
-    Z2 (complex): O segundo número complexo.\n
+    c2 (complex): O segundo número complexo.\n
     form2 (str): A forma do segundo número complexo ("r: retangular" ou "p: polar", em radianos).
 
     **Retorno:**\n
@@ -213,18 +213,18 @@ def oper_comp(Z1, form1, op, Z2, form2):
     """
 
     if form1 == "p":
-        Z1 = pol2ret(*Z1)
+        c1 = pol2ret(*c1)
     if form2 == "p":
-        Z2 = pol2ret(*Z2)
+        c2 = pol2ret(*c2)
 
     if op == "+":
-        return Z1 + Z2
+        return c1 + c2
     elif op == "-":
-        return Z1 - Z2
+        return c1 - c2
     elif op == "*":
-        return Z1 * Z2
+        return c1 * c2
     elif op == "/":
-        return Z1 / Z2
+        return c1 / c2
     elif op not in ["+", "-", "*", "/"]:
         raise ValueError("Operação inválida. Use '+', '-', '*' ou '/'.")
     elif form1 not in ["r", "p"] or form2 not in ["r", "p"]:
@@ -856,3 +856,29 @@ def fator_potencia(V=None, I=None, Zeq=None, S=None, P=None, mod_S=None):
 
     FP = abs(P) / abs(S)
     return FP
+
+
+def calc_banco_capacitor(P, FP_inicial, FP_final, V, f):
+    """
+    # Calcula a capacitância necessária para correção do fator de potência.
+
+    **Parâmetros:**\n
+    P (float): Potência ativa em watts (W)\n
+    FP_inicial (float): Fator de potência inicial (adimensional)\n
+    FP_final (float): Fator de potência final desejado (adimensional)\n
+    V (float): Tensão em volts (V)\n
+    f (float): Frequência em hertz (Hz)\n
+
+    **Retorna:**\n
+    float: Capacitância necessária em microfarads (μF)
+    """
+    from math import pi
+
+    # Calcula a potência reativa necessária para correção
+    Qc = Qcor_pot(P, FP_inicial, FP_final)
+
+    # Cálculo da capacitância necessária
+    Xc = V**2 / Qc  # Reatância capacitiva
+    C = 1 / (2 * pi * f * Xc)  # Capacitância em farads
+
+    return C * 1e6  # Convertendo para microfarads (μF)
