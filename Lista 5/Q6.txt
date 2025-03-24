@@ -1,0 +1,21 @@
+
+*********************************************
+          Demonstração da Potência Reativa Nula          
+          Henrique B Guarines                    
+
+*********************************************
+
+6.
+Sistema trifásico equilibrado:
+- Tensões senoidais com defasagem de 120°.
+- Correntes com mesma defasagem e atraso de 90° (carga puramente indutiva).
+
+Resultados dos cálculos numéricos:
+Potência reativa média (esperado ≈ 0): 4.11e-13 Var
+Máximo valor absoluto encontrado: 4.43e-12 Var
+
+Conclusão:
+- A potência reativa instantânea total em sistema trifásico equilibrado é nula.
+- Os valores encontrados são desprezíveis e atribuídos à precisão numérica.
+
+*********************************************
