@@ -959,3 +959,19 @@ def YBUS(titulo, nbarra, nramos, dadcomp, nome_arq=None):
         gerar_arquivo_texto(nome_arq, "Resultados Ybus e Zbus", calculos)
 
     return Ybus, Zbus
+
+
+def calcular_potencias(mva, fp):
+    """
+    Calcula a potência ativa (W) e reativa (Var) a partir de MVA e FP.
+
+    Parâmetros:
+    mva (float): Potência aparente em MVA (Mega Volt-Amperes).
+    fp (float): Fator de potência (0 a 1).
+
+    Retorna:
+    tuple: Potência ativa em MW (Megawatts) e potência reativa em MVAr (Mega Volt-Amps reativos).
+    """
+    mw = mva * fp  # Potência ativa em MW
+    mvar = mva * (1 - fp**2)**0.5  # Potência reativa em MVAr
+    return mw, mvar
