@@ -1,0 +1,16 @@
+
+*********************************************
+          Cálculo da Queda de Tensão Trifásica          
+          Henrique B Guarines                    
+
+*********************************************
+
+Dados de Entrada:
+Ic = 10 A
+DVc = 5 %
+Lc = 0.1 m
+Vfn = 220 V
+
+Seção do condutor (Sc) = 0.00 mm²
+
+*********************************************

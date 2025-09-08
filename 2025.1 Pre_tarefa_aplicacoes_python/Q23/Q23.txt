@@ -1,0 +1,26 @@
+
+*********************************************
+          APLICAÇÕES PYTHON          
+          Henrique B Guarines                    
+
+*********************************************
+
+23.
+2.26:
+(a) Método da Potência Complexa:
+Vf = 682.38 ∠ 21.49° V
+FP na fonte = 0.85
+
+(b) Método da Análise de Circuito:
+Vf = 682.38 ∠ 21.49° V
+FP na fonte = 0.60
+
+2.27:
+Capacitância necessária: 1154.52 µF
+
+2.28:
+Impedancia total: 1.70 - 0.30j Ω
+(a) Combinação em série de R e X: 1.40 Ω
+(b) Combinação em paralelo R e X: -0.37 Ω
+
+*********************************************

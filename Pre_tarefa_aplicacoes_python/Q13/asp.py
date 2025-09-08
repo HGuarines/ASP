@@ -882,3 +882,96 @@ def calc_banco_capacitor(P, FP_inicial, FP_final, V, f):
     C = 1 / (2 * pi * f * Xc)  # Capacitância em farads
 
     return C * 1e6  # Convertendo para microfarads (μF)
+
+
+def mudar_base(pu_antigo, S_base_antiga, S_base_nova, V_base_antiga, V_base_nova, tipo="z"):
+    """
+    # Calcula a impedância ou a corrente em pu após mudança de base.
+
+    **Parâmetros:**
+    pu_antigo (float): Impedância ou corrente em pu na base antiga\n
+    S_base_antiga (float): Potência base antiga em VA\n
+    S_base_nova (float): Potência base nova em VA\n
+    V_base_antiga (float): Tensão base antiga em V\n
+    V_base_nova (float): Tensão base nova em V\n
+    tipo (str): Escolhe o tipo de cálculo: "z" para impedancia ou "i" para corrente\n
+
+    **Retorno:**\n
+    float: Nova impedância ou nova corrente em pu, dependendo do tipo selecionado
+    """
+    # Cálculo da impedância em pu
+    if tipo == "z":
+        pu_novo = pu_antigo * (S_base_nova / S_base_antiga) * \
+            ((V_base_antiga ** 2) / (V_base_nova ** 2))
+
+    # Cálculo da corrente em pu
+    elif tipo == "i":
+        pu_novo = pu_antigo * (S_base_antiga / S_base_nova) * \
+            (V_base_nova / V_base_antiga)
+
+    else:
+        raise ValueError(
+            "Tipo inválido. Escolha 'z' para impedancia ou 'i' para corrente.")
+
+    return pu_novo
+
+
+def YBUS(titulo, nbarra, nramos, dadcomp, nome_arq=None):
+    """
+    Função para calcular a matriz de admitância Ybus e a matriz de impedância Zbus de um sistema elétrico.
+    """
+    import numpy as np
+
+    # Inicializar a matriz Ybus com zeros
+    Ybus = np.zeros((nbarra, nbarra), dtype=complex)
+
+    # Processar cada componente e calcular a matriz Ybus
+    for ramo in dadcomp:
+        barra_i, barra_j, r, x, b_shunt = ramo
+        z = complex(r, x)  # Impedância série
+        y = 1 / z  # Admitância
+
+        # Atualizar a matriz Ybus para o ramo
+        Ybus[barra_i - 1, barra_i - 1] += y + b_shunt / 2
+        Ybus[barra_j - 1, barra_j - 1] += y + b_shunt / 2
+        Ybus[barra_i - 1, barra_j - 1] -= y
+        Ybus[barra_j - 1, barra_i - 1] -= y
+
+    # Inverter Ybus para obter Zbus
+    Zbus = np.linalg.inv(Ybus)
+
+    # Arredondar os valores para 3 casas decimais
+    Ybus = np.round(Ybus, 3)
+    Zbus = np.round(Zbus, 3)
+
+    # Se nome_arq for fornecido, salvar os resultados no arquivo
+    if nome_arq:
+        calculos = [
+            ('Título:', titulo),
+            ('Número de Barras:', nbarra),
+            ('Número de Ramos:', nramos),
+            ('\nMatriz Ybus:', ''),
+            (str(Ybus), ''),
+            ('\nMatriz Zbus:', ''),
+            (str(Zbus), '')
+        ]
+
+        gerar_arquivo_texto(nome_arq, "Resultados Ybus e Zbus", calculos)
+
+    return Ybus, Zbus
+
+
+def calcular_potencias(mva, fp):
+    """
+    Calcula a potência ativa (W) e reativa (Var) a partir de MVA e FP.
+
+    Parâmetros:
+    mva (float): Potência aparente em MVA (Mega Volt-Amperes).
+    fp (float): Fator de potência (0 a 1).
+
+    Retorna:
+    tuple: Potência ativa em MW (Megawatts) e potência reativa em MVAr (Mega Volt-Amps reativos).
+    """
+    mw = mva * fp  # Potência ativa em MW
+    mvar = mva * (1 - fp**2)**0.5  # Potência reativa em MVAr
+    return mw, mvar

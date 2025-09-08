@@ -1,0 +1,67 @@
+
+*********************************************
+          Cálculo da Impedância do Cabo de Cobre          
+          Henrique B Guarines                    
+
+*********************************************
+
+Seção do condutor (Sc) = 1.5 mm²
+Impedância do cabo = 14.800 + 0.168j Ω/km
+
+*********************************************
+Seção do condutor (Sc) = 2.5 mm²
+Impedância do cabo = 8.910 + 0.155j Ω/km
+
+*********************************************
+Seção do condutor (Sc) = 4 mm²
+Impedância do cabo = 5.570 + 0.145j Ω/km
+
+*********************************************
+Seção do condutor (Sc) = 6 mm²
+Impedância do cabo = 3.700 + 0.132j Ω/km
+
+*********************************************
+Seção do condutor (Sc) = 10 mm²
+Impedância do cabo = 2.240 + 0.119j Ω/km
+
+*********************************************
+Seção do condutor (Sc) = 16 mm²
+Impedância do cabo = 1.400 + 0.112j Ω/km
+
+*********************************************
+Seção do condutor (Sc) = 25 mm²
+Impedância do cabo = 0.880 + 0.106j Ω/km
+
+*********************************************
+Seção do condutor (Sc) = 35 mm²
+Impedância do cabo = 0.641 + 0.101j Ω/km
+
+*********************************************
+Seção do condutor (Sc) = 50 mm²
+Impedância do cabo = 0.473 + 0.101j Ω/km
+
+*********************************************
+Seção do condutor (Sc) = 70 mm²
+Impedância do cabo = 0.328 + 0.097j Ω/km
+
+*********************************************
+Seção do condutor (Sc) = 95 mm²
+Impedância do cabo = 0.236 + 0.098j Ω/km
+
+*********************************************
+Seção do condutor (Sc) = 120 mm²
+Impedância do cabo = 0.188 + 0.094j Ω/km
+
+*********************************************
+Seção do condutor (Sc) = 150 mm²
+Impedância do cabo = 0.153 + 0.093j Ω/km
+
+*********************************************
+Seção do condutor (Sc) = 185 mm²
+Impedância do cabo = 0.124 + 0.090j Ω/km
+
+*********************************************
+Seção do condutor (Sc) = 240 mm²
+Impedância do cabo = 0.093 + 0.090j Ω/km
+
+*********************************************

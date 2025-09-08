@@ -1,20 +1,17 @@
-"""1. Exemplo usando a função pot_comp1f(V, I)"""
+"""1. Exemplo usando a função imp_series(Z1,Z2)"""
 
 import asp
-import numpy as np
 
 # Dados de entrada
-V = asp.pol2ret(220, 0)
-I = asp.pol2ret(10, 0)
+Z1 = 1 + 2j
+Z2 = 3 + 4j
 
-# Cálculo
-P = asp.pot_comp1f(V, I)
-P_polar = asp.ret2pol(P)
+# Calculo da impedancia equivalente
+Zeq = asp.imp_serie(Z1, Z2)
 
-# Resultado
-rsp1 = [('1.\n', 'Dados:'),
-        ('V = ', '220 ∠ 0° V'),
-        ('I = ', '10 ∠ 0° A'),
-        ('\nTemos que:\nP = ', f'{P_polar[0]:.1f} ∠ {np.degrees(P_polar[1]):.1f}° W')]
+rsp4 = [('1.\n', 'Dados:'),
+        ('Z1 = ', f'{asp.format_complex(Z1)} Ω'),
+        ('Z2 = ', f'{asp.format_complex(Z2)} Ω'),
+        ('\nA impedância equivalente em série é:\nZeq = ', f'{asp.format_complex(Zeq)} Ω')]
 
-asp.gerar_arquivo_texto('Q1.txt', 'APLICAÇÕES PYTHON', rsp1)
+asp.gerar_arquivo_texto('Q1.txt', 'APLICAÇÕES PYTHON', rsp4)

@@ -7,24 +7,10 @@
 
 3.
 Dados:
-Va = 220 ∠ 0° V
-Ia = 10 ∠ 0° A
-Vb = 220 ∠ 120° V
-Ib = 10 ∠ 120° A
-Vc = 220 ∠ 240° V
-Ic = 10 ∠ 240° A
+V = 220 ∠ 0° V
+I = 10 ∠ 0° A
 
-Temos que 
-A potencia aparente monofásica é:
-Sa = 2200.0 ∠ 0.0° W
-
-A corrente de carga monofásica é:
-I1f = 10.9 ∠ 0.0° A
-
-E a potencia aparente trifásica é:
-S3f = 6600.0 ∠ -0.0° W
-
-E a corrente de carga trifásica é:
-I3f = 18.8 ∠ 0.0° A
+Temos que:
+P = 2200.0 ∠ 0.0° W
 
 *********************************************

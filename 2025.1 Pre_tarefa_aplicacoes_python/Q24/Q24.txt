@@ -1,0 +1,22 @@
+
+*********************************************
+          APLICAÇÕES PYTHON          
+          Henrique B Guarines                    
+
+*********************************************
+
+24.
+2.30:
+(a) Determine Pt, Qt, St e FP
+Pt = 60.0 kW
+Qt = 80.0 kVAr
+St = 100.0 kVA
+FP = 0.6
+
+(b) Encontre o banco de capacitor para FP = 0.8
+Novo Q necessário para correção = 35.0 kVAr
+C = 92.84 μF
+I antes da correção: 100.0
+I depois da correção: 75.0
+
+*********************************************

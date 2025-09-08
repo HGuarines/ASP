@@ -1,0 +1,18 @@
+
+*********************************************
+          Resultados da Conversão Estrela-Delta          
+          Henrique B Guarines                    
+
+*********************************************
+
+Dados de Entrada:(Impedancias de fase em Estrela)
+Za = 5.00 + 2.00j
+Zb = 3.00 + 1.00j
+Zc = 4.00 + 3.00j
+
+Resultados:(Impedancias de fase em Delta)
+Zab = 15.50 + 10.50j
+Zbc = 11.40 + 3.20j
+Zca = 9.45 + 5.62j
+
+*********************************************

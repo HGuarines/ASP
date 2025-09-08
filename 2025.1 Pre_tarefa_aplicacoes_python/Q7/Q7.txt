@@ -1,0 +1,17 @@
+
+*********************************************
+          APLICAÇÕES PYTHON          
+          Henrique B Guarines                    
+
+*********************************************
+
+7.
+Dados:
+P = 8172 W
+FPA = 0.75
+FPN = 0.92
+
+A potência reativa de correção necessária para compensar o fator de potência do sistema é:
+Qcor = 3.73 kVAr
+
+*********************************************

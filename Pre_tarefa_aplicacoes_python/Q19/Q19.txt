@@ -14,11 +14,11 @@ Impedância do cabo = 8.910 + 0.155j Ω/km
 
 *********************************************
 Seção do condutor (Sc) = 4 mm²
-Impedância do cabo = 5.570 + 0.145j Ω/km
+Impedância do cabo = 5.570 + 0.143j Ω/km
 
 *********************************************
 Seção do condutor (Sc) = 6 mm²
-Impedância do cabo = 3.700 + 0.132j Ω/km
+Impedância do cabo = 3.710 + 0.135j Ω/km
 
 *********************************************
 Seção do condutor (Sc) = 10 mm²
@@ -26,7 +26,7 @@ Impedância do cabo = 2.240 + 0.119j Ω/km
 
 *********************************************
 Seção do condutor (Sc) = 16 mm²
-Impedância do cabo = 1.400 + 0.112j Ω/km
+Impedância do cabo = 1.410 + 0.112j Ω/km
 
 *********************************************
 Seção do condutor (Sc) = 25 mm²
@@ -34,7 +34,7 @@ Impedância do cabo = 0.880 + 0.106j Ω/km
 
 *********************************************
 Seção do condutor (Sc) = 35 mm²
-Impedância do cabo = 0.641 + 0.101j Ω/km
+Impedância do cabo = 0.841 + 0.101j Ω/km
 
 *********************************************
 Seção do condutor (Sc) = 50 mm²
@@ -58,10 +58,10 @@ Impedância do cabo = 0.153 + 0.093j Ω/km
 
 *********************************************
 Seção do condutor (Sc) = 185 mm²
-Impedância do cabo = 0.124 + 0.090j Ω/km
+Impedância do cabo = 0.123 + 0.091j Ω/km
 
 *********************************************
 Seção do condutor (Sc) = 240 mm²
-Impedância do cabo = 0.093 + 0.090j Ω/km
+Impedância do cabo = 0.094 + 0.090j Ω/km
 
 *********************************************
