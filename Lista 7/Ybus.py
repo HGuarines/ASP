@@ -47,8 +47,8 @@ def Ybus(file_path="dados_sep.txt"):
             Ybus = np.zeros((nb, nb), dtype=complex)
             Eramo = np.zeros(nr, dtype=float)
             Faseramo = np.zeros(nr, dtype=float)
-            Isi = np.zeros(nb, dtype=complex)
-            Vsi = np.zeros(nb, dtype=complex)
+            Isi = np.zeros((nb, 1), dtype=complex)
+            Vsi = np.zeros((nb, 1), dtype=complex)
             Identif = [""] * nr
 
             # Linha de comentário
@@ -94,9 +94,19 @@ def Ybus(file_path="dados_sep.txt"):
             Zbus = np.linalg.inv(Ybus)
 
             # Calculando Vsi
-            Vsi = Isi * Zbus
+            Vsi = Zbus @ Isi
 
-            return Ybus, Zbus, Eramo, Faseramo, Isi, Vsi, Bi, Bf, Ysa, Ysb, Identif, Zser, Isi
+            # Calculando corrente na LT
+            i_ramo = np.zeros((nr, 1), dtype=complex)
+            for m in range(nr):
+                if Bi[m] == 0:
+                    i_ramo[m] += -Vsi[Bf[m]-1] / Zser[m]
+                if Bf[m] == 0:
+                    i_ramo[m] += Vsi[Bi[m]-1] / Zser[m]
+                else:
+                    i_ramo[m] += (Vsi[Bf[m]-1] - Vsi[Bi[m]-1]) / Zser[m]
+
+            return Ybus, Zbus, Eramo, Faseramo, Isi, Vsi, i_ramo, Bi, Bf, Ysa, Ysb, Identif, Zser, Isi
 
     except FileNotFoundError:
         raise FileNotFoundError(f"Arquivo {file_path} não encontrado")
@@ -104,8 +114,8 @@ def Ybus(file_path="dados_sep.txt"):
         raise RuntimeError(f"Erro ao processar o arquivo: {str(e)}")
 
 
-ybus, zbus, Eramo, Faseramo, Isi, Vsi, *_ = Ybus()
+ybus, zbus, Eramo, Faseramo, Isi, Vsi, i_ramo, *_ = Ybus()
 
 np.set_printoptions(precision=2, suppress=True)
-print("Matriz Ybus:")
-print(ybus)
+print("Correntes nos ramos:")
+print(i_ramo)
