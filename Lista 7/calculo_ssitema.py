@@ -92,73 +92,89 @@ class SistemaEletrico:
     def calcular_ybus(self):
         """
         Monta Ybus e calcula Zbus. Retorna:
-        (Ybus, Zbus, Eramo, Faseramo, Isi, Vsi, Bi, Bf, Ysa, Ysb, Identif, Zser)
-        Isi: vetor de injeções por barra construído a partir dos ramos que têm 'de' como barra (aprox.)
-        Vsi: Zbus @ Isi
-        Observação: barras indexadas 1-based nos dados; aceitamos '0' como barra de referência (não incluída em Ybus).
+        (Ybus, Zbus, Eramo, Faseramo, Isi, Vsi, i_ramo, Bi, Bf, Ysa, Ysb, Identif, Zser)
         """
         nb = self.nb
         nr = len(self.ramos)
-        Bi = np.zeros(nr, dtype=int)
-        Bf = np.zeros(nr, dtype=int)
+
+        # Utilizar tipos de dados idênticos ao código de referência
+        Bi = np.zeros(nr, dtype=np.int64)
+        Bf = np.zeros(nr, dtype=np.int64)
         Ysa = np.zeros(nr, dtype=complex)
         Ysb = np.zeros(nr, dtype=complex)
         Zser = np.zeros(nr, dtype=complex)
+        Yser = np.zeros(nr, dtype=complex)  # Adicionar Yser explicitamente
         Eramo = np.zeros(nr, dtype=float)
         Faseramo = np.zeros(nr, dtype=float)
         Identif = [""] * nr
         Ybus = np.zeros((nb, nb), dtype=complex)
-        # preencher
+
+        # Preencher os arrays com os dados dos ramos
         for i, r in enumerate(self.ramos):
             Bi[i] = int(r["de"])
             Bf[i] = int(r["para"])
             Zser[i] = complex(r["zser"])
+            Yser[i] = 1.0/Zser[i] if Zser[i] != 0 else 0
             Ysa[i] = complex(r.get("ysa", 0j))
             Ysb[i] = complex(r.get("ysb", 0j))
             Eramo[i] = float(r.get("eram", 0.0))
             Faseramo[i] = float(r.get("faseramo", 0.0))
             Identif[i] = r.get("identif", "")
-            # montar Ybus (tratando barras 0 como referência externa)
-            L = Bi[i]-1
-            M = Bf[i]-1
-            Yser = 1.0 / Zser[i] if Zser[i] != 0 else 0
-            # se ambos barras >0
-            if L >= 0 and M >= 0:
-                Ybus[L, L] += Yser + Ysa[i]
-                Ybus[M, M] += Yser + Ysb[i]
-                Ybus[L, M] -= Yser
-                Ybus[M, L] -= Yser
-            elif L >= 0:  # referência no fim (M== -1)
-                Ybus[L, L] += Yser + Ysb[i]
-            elif M >= 0:  # referência no início
-                Ybus[M, M] += Yser + Ysa[i]
-        # inversa (Zbus) – cuidar de singularidade
+
+        # Montar Ybus exatamente como no código de referência
+        for j in range(nr):
+            L = Bi[j]
+            M = Bf[j]
+            if (M != 0) and (L != 0):
+                L = L - 1
+                M = M - 1
+                Ybus[L, L] = Ybus[L, L] + Yser[j] + Ysa[j]
+                Ybus[M, M] = Ybus[M, M] + Yser[j] + Ysb[j]
+                Ybus[L, M] = Ybus[L, M] - Yser[j]
+                Ybus[M, L] = Ybus[M, L] - Yser[j]
+            if (L == 0) and (M != 0):
+                M = M - 1
+                Ybus[M, M] = Ybus[M, M] + Yser[j] + Ysa[j]
+            if (M == 0) and (L != 0):
+                L = L - 1
+                Ybus[L, L] = Ybus[L, L] + Yser[j] + Ysb[j]
+
+        # Calcular Isi exatamente como no código de referência
+        # Usar formato (nb, 1) para manter formato de matriz coluna
+        Isi = np.zeros((nb, 1), dtype=complex)
+        for k in range(nr):
+            if Bi[k] == 0:
+                Isi[Bf[k]-1, 0] = rect(Eramo[k], radians(Faseramo[k]))/Zser[k]
+            if Bf[k] == 0:
+                Isi[Bi[k]-1, 0] = rect(Eramo[k], radians(Faseramo[k]))/Zser[k]
+
+        # Cálculo de Zbus usando a mesma abordagem
+        # Definir tipos de dados explicitamente e usar formato exato
+        Zbus = np.zeros((nb, nb), dtype=complex)
         try:
+            # Usar a mesma chamada para inverter
             Zbus = np.linalg.inv(Ybus)
         except np.linalg.LinAlgError:
             Zbus = None
-        # Calcular Isi: interpretarei Isi como vetor de correntes de fontes internas:
-        # Vou construir Isi por barra somando correntes de ramos que 'de' é essa barra,
-        # usando Eramo/Faseramo como tensão de referência na origem do ramo dividido por Zser.
-        Isi = np.zeros(nb, dtype=complex)
-        # I_branch for each ramo:
-        Ibranch = np.zeros(nr, dtype=complex)
-        for i in range(nr):
-            # se Zser==0 evita divisão por zero
-            try:
-                Ibranch[i] = rect(Eramo[i], radians(
-                    Faseramo[i])) / Zser[i] if Zser[i] != 0 else 0
-            except Exception:
-                Ibranch[i] = 0
-            # adicionar contribuição na barra 'de' (se non-ref)
-            idx = Bi[i]-1
-            if 0 <= idx < nb:
-                Isi[idx] += Ibranch[i]
-            # se desejarmos, a barra 'para' receberia -Ibranch (corrente saindo),
-            # mas para seguir aproximação simples descontemos isso.
-        # Vsi = Zbus @ Isi (se Zbus disponível)
-        Vsi = Zbus.dot(Isi) if Zbus is not None else None
-        return Ybus, Zbus, Eramo, Faseramo, Isi, Vsi, Bi, Bf, Ysa, Ysb, Identif, Zser
+
+        # Calcular Vsi
+        Vsi = np.zeros((nb, 1), dtype=complex)
+        if Zbus is not None:
+            Vsi = Zbus @ Isi
+
+        # Calcular correntes nos ramos
+        i_ramo = np.zeros((nr, 1), dtype=complex)
+        for m in range(nr):
+            a = Bf[m] - 1
+            b = Bi[m] - 1
+            if Bf[m] != 0 and Bi[m] != 0:
+                i_ramo[m] = (Vsi[b, 0] - Vsi[a, 0]) / Zser[m]
+            elif Bi[m] == 0:
+                i_ramo[m] = (-Vsi[a, 0]) / Zser[m]
+            elif Bf[m] == 0:
+                i_ramo[m] = Vsi[b, 0] / Zser[m]
+
+        return Ybus, Zbus, Eramo, Faseramo, Isi, Vsi, i_ramo, Bi, Bf, Ysa, Ysb, Identif, Zser
 
 
 # Testando com os ramos fornecidos pelo usuário
@@ -180,7 +196,7 @@ sistema.adicionar_ramo(8,  9,  0.15j, 0.0, 0.0, 0,     0,    "T4")
 sistema.adicionar_ramo(9, 0,  0.9j,  0.0, 0.0, 0.95, -12,   "M2")
 
 # Calcular
-Ybus, Zbus, Eramo, Faseramo, Isi, Vsi, Bi, Bf, Ysa, Ysb, Identif, Zser = sistema.calcular_ybus()
+Ybus, Zbus, Eramo, Faseramo, Isi, Vsi, i_ramo, Bi, Bf, Ysa, Ysb, Identif, Zser = sistema.calcular_ybus()
 
 # Impressão sucinta e clara dos resultados principais
 print("Número de barras (nb):", sistema.nb)

@@ -99,14 +99,16 @@ def Ybus(file_path="dados_sep.txt"):
             # Calculando corrente na LT
             i_ramo = np.zeros((nr, 1), dtype=complex)
             for m in range(nr):
-                if Bi[m] == 0:
-                    i_ramo[m] += -Vsi[Bf[m]-1] / Zser[m]
-                if Bf[m] == 0:
-                    i_ramo[m] += Vsi[Bi[m]-1] / Zser[m]
-                else:
-                    i_ramo[m] += (Vsi[Bf[m]-1] - Vsi[Bi[m]-1]) / Zser[m]
+                a = Bf[m]-1
+                b = Bi[m]-1
+                if Bf[m] != 0 and Bi[m] != 0:
+                    i_ramo[m] = (Vsi[b, 0] - Vsi[a, 0]) / Zser[m]
+                elif Bi[m] == 0:
+                    i_ramo[m] = (-Vsi[a, 0]) / Zser[m]
+                elif Bf[m] == 0:
+                    i_ramo[m] = Vsi[b, 0] / Zser[m]
 
-            return Ybus, Zbus, Eramo, Faseramo, Isi, Vsi, i_ramo, Bi, Bf, Ysa, Ysb, Identif, Zser, Isi
+            return Ybus, Zbus, Eramo, Faseramo, Isi, Vsi, i_ramo, Bi, Bf, Ysa, Ysb, Identif, Zser
 
     except FileNotFoundError:
         raise FileNotFoundError(f"Arquivo {file_path} não encontrado")
