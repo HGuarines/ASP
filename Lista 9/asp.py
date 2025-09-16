@@ -916,51 +916,6 @@ def mudar_base(pu_antigo, S_base_antiga, S_base_nova, V_base_antiga, V_base_nova
     return pu_novo
 
 
-# def YBUS(titulo, nbarra, nramos, dadcomp, nome_arq=None):
-#     """
-#     Função para calcular a matriz de admitância Ybus e a matriz de impedância Zbus de um sistema elétrico.
-#     """
-#     import numpy as np
-
-#     # Inicializar a matriz Ybus com zeros
-#     Ybus = np.zeros((nbarra, nbarra), dtype=complex)
-
-#     # Processar cada componente e calcular a matriz Ybus
-#     for ramo in dadcomp:
-#         barra_i, barra_j, r, x, b_shunt = ramo
-#         z = complex(r, x)  # Impedância série
-#         y = 1 / z  # Admitância
-
-#         # Atualizar a matriz Ybus para o ramo
-#         Ybus[barra_i - 1, barra_i - 1] += y + b_shunt / 2
-#         Ybus[barra_j - 1, barra_j - 1] += y + b_shunt / 2
-#         Ybus[barra_i - 1, barra_j - 1] -= y
-#         Ybus[barra_j - 1, barra_i - 1] -= y
-
-#     # Inverter Ybus para obter Zbus
-#     Zbus = np.linalg.inv(Ybus)
-
-#     # Arredondar os valores para 3 casas decimais
-#     Ybus = np.round(Ybus, 3)
-#     Zbus = np.round(Zbus, 3)
-
-#     # Se nome_arq for fornecido, salvar os resultados no arquivo
-#     if nome_arq:
-#         calculos = [
-#             ('Título:', titulo),
-#             ('Número de Barras:', nbarra),
-#             ('Número de Ramos:', nramos),
-#             ('\nMatriz Ybus:', ''),
-#             (str(Ybus), ''),
-#             ('\nMatriz Zbus:', ''),
-#             (str(Zbus), '')
-#         ]
-
-#         gerar_arquivo_texto(nome_arq, "Resultados Ybus e Zbus", calculos)
-
-#     return Ybus, Zbus
-
-
 def calcular_potencias(mva, fp):
     """
     Calcula a potência ativa (W) e reativa (Var) a partir de MVA e FP.
@@ -992,6 +947,10 @@ class SistemaEletrico:
     def __init__(self, num_barras):
         """
         Inicializa um sistema elétrico com o número especificado de barras.
+
+        Permite criar uma representação de um sistema elétrico com N barras e seus ramos,
+        e realizar cálculos como matriz de admitância de barra (Ybus), matriz de impedância
+        de barra (Zbus), e cálculo de fluxos.
 
         **Parâmetros:**\n
         num_barras (int): Número de barras do sistema, excluindo a referência.
@@ -1122,9 +1081,6 @@ class SistemaEletrico:
             - Yser (numpy.ndarray): Vetor de admitâncias série dos ramos [nr]
             - Ysa (numpy.ndarray): Vetor de admitâncias shunt no início dos ramos [nr]
             - Ysb (numpy.ndarray): Vetor de admitâncias shunt no fim dos ramos [nr]
-            - Eramo (numpy.ndarray): Vetor de módulos das tensões internas [nr]
-            - Faseramo (numpy.ndarray): Vetor de ângulos das tensões internas em graus [nr]
-            - Identif (list): Lista de identificadores dos ramos [nr]
         """
         import numpy as np
 
@@ -1138,8 +1094,6 @@ class SistemaEletrico:
         Ysb = np.zeros(nr, dtype=complex)
         Zser = np.zeros(nr, dtype=complex)
         Yser = np.zeros(nr, dtype=complex)
-        Eramo = np.zeros(nr, dtype=float)
-        Faseramo = np.zeros(nr, dtype=float)
         Identif = [""] * nr
         Ybus = np.zeros((nb, nb), dtype=complex)
 
@@ -1151,8 +1105,6 @@ class SistemaEletrico:
             Yser[i] = 1.0/Zser[i] if Zser[i] != 0 else 0
             Ysa[i] = complex(r.get("ysa", 0j))
             Ysb[i] = complex(r.get("ysb", 0j))
-            Eramo[i] = float(r.get("eram", 0.0))
-            Faseramo[i] = float(r.get("faseramo", 0.0))
             Identif[i] = r.get("identif", "")
 
         # Montagem da matriz Ybus exatamente como no código original
@@ -1180,7 +1132,7 @@ class SistemaEletrico:
         except np.linalg.LinAlgError:
             Zbus = None
 
-        return Ybus, Zbus, Bi, Bf, Zser, Yser, Ysa, Ysb, Eramo, Faseramo, Identif
+        return Ybus, Zbus, Bi, Bf, Zser, Yser, Ysa, Ysb
 
     def calcular_parametros_rede(self):
         """
@@ -1196,15 +1148,24 @@ class SistemaEletrico:
             - Faseramo (numpy.ndarray): Vetor de ângulos das tensões internas em graus [nr]
             - Bi (numpy.ndarray): Vetor de barras de origem dos ramos [nr]
             - Bf (numpy.ndarray): Vetor de barras de destino dos ramos [nr]
-            - Identif (list): Lista de identificadores dos ramos [nr]
             - Zser (numpy.ndarray): Vetor de impedâncias série dos ramos [nr]
         """
         import numpy as np
         from cmath import rect
         from math import radians
 
+        nb = self.nb
+        nr = len(self.ramos)
+
+        Eramo = np.zeros(nr, dtype=float)
+        Faseramo = np.zeros(nr, dtype=float)
+
+        for i, r in enumerate(self.ramos):
+            Eramo[i] = float(r.get("eram", 0.0))
+            Faseramo[i] = float(r.get("faseramo", 0.0))
+
         # Obtém as matrizes da rede
-        Ybus, Zbus, Bi, Bf, Zser, Yser, Ysa, Ysb, Eramo, Faseramo, Identif = self.calcular_matrizes_rede()
+        Ybus, Zbus, Bi, Bf, Zser, Yser, Ysa, Ysb = self.calcular_matrizes_rede()
 
         nb = self.nb
         nr = len(self.ramos)
@@ -1234,26 +1195,37 @@ class SistemaEletrico:
             elif Bf[m] == 0:
                 i_ramo[m, 0] = Vsi[b, 0] / Zser[m]
 
-        return Isi, Vsi, i_ramo, Eramo, Faseramo, Bi, Bf, Identif, Zser
+        return Isi, Vsi, i_ramo, Eramo, Faseramo, Bi, Bf, Zser
 
-    def calcular_ybus(self):
+    def obter_ramos(self):
         """
-        Método legado que calcula a matriz de admitância nodal (Ybus), matriz de
-        impedância nodal (Zbus) e parâmetros elétricos da rede.
+        Retorna um único dicionário consolidado com os dados de todos os ramos do sistema.
 
-        Este método é mantido para compatibilidade com código existente. Para novos
-        desenvolvimentos, recomenda-se usar calcular_matrizes_rede() e 
-        calcular_parametros_rede() separadamente.
+        O dicionário retornado possui como chaves os nomes dos parâmetros dos ramos 
+        ('de', 'para', 'zser', etc.) e como valores listas contendo todos os valores 
+        correspondentes de cada ramo, na ordem em que foram adicionados.
 
         **Retorno:**\n
-        tuple: Uma tupla contendo os resultados completos dos cálculos:
-            - Ybus, Zbus, Eramo, Faseramo, Isi, Vsi, i_ramo, Bi, Bf, Ysa, Ysb, Identif, Zser
+        dict: Dicionário com as seguintes chaves, cada uma contendo uma lista de valores:
+        - 'de': barras de origem
+        - 'para': barras de destino
+        - 'zser': impedâncias série
+        - 'ysa': admitâncias shunt no início dos ramos
+        - 'ysb': admitâncias shunt no fim dos ramos
+        - 'eram': módulos das tensões internas (fontes)
+        - 'faseramo': ângulos das tensões internas em graus
+        - 'identif': identificadores dos ramos
+        - 'extras': listas de valores extras fornecidos
         """
-        # Calcula as matrizes da rede
-        Ybus, Zbus, Bi, Bf, Zser, Yser, Ysa, Ysb, Eramo, Faseramo, Identif = self.calcular_matrizes_rede()
+        # Inicializa o dicionário com listas vazias para cada chave
+        ramos_dict = {
+            'de': [], 'para': [], 'zser': [], 'ysa': [], 'ysb': [],
+            'eram': [], 'faseramo': [], 'identif': [], 'extras': []
+        }
 
-        # Calcula os parâmetros da rede
-        Isi, Vsi, i_ramo, _, _, _, _, _, _ = self.calcular_parametros_rede()
+        # Preenche as listas com os valores de cada ramo
+        for ramo in self.ramos:
+            for key in ramos_dict:
+                ramos_dict[key].append(ramo[key])
 
-        # Retorna todos os resultados na ordem original para compatibilidade
-        return Ybus, Zbus, Eramo, Faseramo, Isi, Vsi, i_ramo, Bi, Bf, Ysa, Ysb, Identif, Zser
+        return ramos_dict
