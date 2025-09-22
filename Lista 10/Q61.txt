@@ -1,0 +1,24 @@
+
+*********************************************
+          Resultado circuito PI apresentado          
+          Henrique B Guarines                    
+
+*********************************************
+
+Q61
+
+Dados do sistema:
+
+Tensão na Barra 1 (V1) = 1.00 ∠ 0.00°
+Impedância série da linha (z) = 0.01 + 0.10j
+Admitância shunt total da linha (yshunt) = 0.05j
+Potência nominal da carga (S) = 1.00 + 0.50j
+Fatores do modelo ZIP: 
+Kp = 0.50; 
+Ki = 0.30; 
+Kz = 0.20
+
+Resultado
+Tensão V2 = 0.94 ∠ -5.58°
+
+*********************************************
