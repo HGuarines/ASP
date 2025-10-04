@@ -1,0 +1,51 @@
+
+*********************************************
+          FIGURA 1          
+          GRUPO TAREFA 14
+Henrique B Guarines
+Lucas Brito
+Vitor Perrier                    
+
+*********************************************
+
+FIGURA 1
+
+1. 
+Tipo do condutor: SPARROW
+AWG: 2.0
+Raio do condutor (mm): 4.01
+Raio Medio Geométrico (mm): 0.00308
+Resistência a 75°C (ohm/km): 1.1023
+Resistência a 50°C (ohm/km): 1.0114
+
+2. 
+Matriz de impedância por unidade de comprimento com condutor imagem (ohm/km): 
+[[1.0114+0.6451j 0.    +0.2223j 0.    +0.1457j]
+ [0.    +0.2223j 1.0114+0.6451j 0.    +0.1788j]
+ [0.    +0.1457j 0.    +0.1788j 1.0114+0.6451j]]
+
+3. 
+Matriz de impedância por unidade de comprimento sem condutor imagem (ohm/km): 
+[[ 1.0114+0.436j   0.    +0.0131j -0.    -0.0641j]
+ [ 0.    +0.0131j  1.0114+0.436j  -0.    -0.0306j]
+ [-0.    -0.0641j -0.    -0.0306j  1.0114+0.436j ]]
+
+4. 
+Impedância aparente por fase com condutor imagem (ohm/km): 
+Fase A: 1.0114 + 0.4610j
+Fase B: 1.0114 + 0.4445j
+Fase C: 1.0114 + 0.4828j
+
+5. 
+Impedância aparente por fase sem condutor imagem (ohm/km): 
+Fase A: 1.0114 + 0.4615j
+Fase B: 1.0114 + 0.4447j
+Fase C: 1.0114 + 0.4834j
+
+6. 
+Impedância de serviço da linha com condutor imagem (ohm): 1.01 + 0.46j
+
+7. 
+Impedância de serviço da linha sem condutor imagem (ohm): 1.01 + 0.46j
+
+*********************************************

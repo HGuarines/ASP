@@ -1,0 +1,51 @@
+
+*********************************************
+          FIGURA 2          
+          GRUPO TAREFA 14
+Henrique B Guarines
+Lucas Brito
+Vitor Perrier                    
+
+*********************************************
+
+FIGURA 2
+
+1. 
+Tipo do condutor: PIGEON
+AWG: 3.0
+Raio do condutor (mm): 6.375
+Raio Medio Geométrico (mm): 0.00489
+Resistência a 75°C (ohm/km): 0.474
+Resistência a 50°C (ohm/km): 0.4349
+
+2. 
+Matriz de impedância por unidade de comprimento com condutor imagem (ohm/km): 
+[[0.4349+0.6086j 0.    +0.1321j 0.    +0.1301j]
+ [0.    +0.1321j 0.4349+0.6124j 0.    +0.2316j]
+ [0.    +0.1301j 0.    +0.2316j 0.4349+0.6194j]]
+
+3. 
+Matriz de impedância por unidade de comprimento sem condutor imagem (ohm/km): 
+[[ 0.4349+0.4012j -0.    -0.0784j -0.    -0.084j ]
+ [-0.    -0.0784j  0.4349+0.4012j  0.    +0.0168j]
+ [-0.    -0.084j   0.    +0.0168j  0.4349+0.4012j]]
+
+4. 
+Impedância aparente por fase com condutor imagem (ohm/km): 
+Fase A: 0.4349 + 0.4775j
+Fase B: 0.4349 + 0.4305j
+Fase C: 0.4349 + 0.4385j
+
+5. 
+Impedância aparente por fase sem condutor imagem (ohm/km): 
+Fase A: 0.4349 + 0.4824j
+Fase B: 0.4349 + 0.4319j
+Fase C: 0.4349 + 0.4347j
+
+6. 
+Impedância de serviço da linha com condutor imagem (ohm): 0.43 + 0.45j
+
+7. 
+Impedância de serviço da linha sem condutor imagem (ohm): 0.43 + 0.45j
+
+*********************************************
