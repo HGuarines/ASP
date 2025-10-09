@@ -1,0 +1,39 @@
+
+*********************************************
+          TAREFA 16 Q2          
+          Henrique B. Guarines                    
+
+*********************************************
+
+Respostas Imagem 2
+1. Dados dos condutores: 
+Raio do condutor (mm): 7.275
+Raio Médio Geométrico (m): 0.00552
+Resistência das fases a 75°C (ohm/km): 0.278
+Resistência das fases a 50°C (ohm/km): 0.2551
+
+2. Matriz 3x3 da capacitância da linha
+[[ 0.+7.21931589e-08j  0.-3.07051317e-08j  0.-3.29174390e-08j]
+ [ 0.-3.07051317e-08j -0.+1.87898623e-08j  0.-5.74736414e-09j]
+ [ 0.-3.29174390e-08j  0.-5.74736414e-09j  0.+2.01213167e-08j]]
+
+3. Matriz 3x3 da capacitância da linha sem o condutor imagem
+[[ 0.+8.34308251e-08j  0.-4.96057329e-08j  0.-5.24103339e-08j]
+ [-0.-4.96057329e-08j  0.+5.78741256e-08j  0.+3.43529960e-08j]
+ [-0.-5.24103339e-08j  0.+3.43529960e-08j  0.+6.13034859e-08j]]
+
+4. Capacitância aparente por fase da linha (nF/km):
+Fase A: 104.0044j
+Fase B: 37.0161j
+Fase C: 39.4537j
+
+5. Capacitância aparente por fase da linha sem condutor imagem (nF/km):
+Fase A: 134.4389j
+Fase B: 65.5005j
+Fase C: 70.3322j
+
+6. Capacitância de serviço da linha (nF): 60.16j
+
+7. Capacitância de serviço da linha sem condutor imagem (nF): 90.09j
+
+*********************************************

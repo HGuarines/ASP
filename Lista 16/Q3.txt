@@ -1,0 +1,98 @@
+
+*********************************************
+          TAREFA 16 Q3          
+          Henrique B. Guarines                    
+
+*********************************************
+
+Respostas Imagem 3
+1. Dados dos subcondutores: 
+Raio do condutor (mm): 12.575
+Raio Médio Geométrico (m): 0.01021
+Resistência das fases a 75°C (ohm/km): 0.108
+Resistência dos cabos para raios a 75°C (ohm/km): 0.497
+Resistência das fases a 50°C (nF/km): 0.0991
+Resistência dos cabos para raios a 50°C (ohm/km): 0.456
+
+2. Dados do feixe
+Raio Médio Geométrico (mm): 0.00261
+Resistência das fases a 75°C (ohm/km): 0.054
+Resistência das fases a 50°C (ohm/km): 0.0495
+
+3. Matriz capacitância da linha 5x5
+[[ 0.-7.02412144e-08j  0.-4.74094965e-08j  0.+1.02893998e-07j   0.+7.85823538e-09j  0.-2.41182310e-09j]
+ [ 0.-4.74094965e-08j -0.+6.00450520e-08j  0.-4.74094965e-08j  -0.+2.80848068e-09j  0.+2.80848068e-09j]
+ [-0.+1.02893998e-07j  0.-4.74094965e-08j  0.-7.02412144e-08j   0.-2.41182310e-09j -0.+7.85823538e-09j]
+ [ 0.+7.85823538e-09j  0.+2.80848068e-09j -0.-2.41182310e-09j  -0.-7.81980692e-09j  0.+6.04581224e-10j]
+ [ 0.-2.41182310e-09j  0.+2.80848068e-09j  0.+7.85823538e-09j   0.+6.04581224e-10j  0.-7.81980692e-09j]]
+
+4. Matriz capacitância da linha 5x5 - sem CI
+[[ 0.-4.49641812e-08j  0.-3.93456607e-08j -0.+8.30767550e-08j  -0.+6.59824077e-09j  0.-1.67175219e-09j]
+ [ 0.-3.93456607e-08j  0.+8.92067052e-08j -0.-3.93456607e-08j   0.+2.27616839e-09j  0.+2.27616839e-09j]
+ [ 0.+8.30767550e-08j -0.-3.93456607e-08j -0.-4.49641812e-08j  -0.-1.67175219e-09j  0.+6.59824077e-09j]
+ [ 0.+6.59824077e-09j -0.+2.27616839e-09j  0.-1.67175219e-09j   0.-7.72199756e-09j  0.+6.12916921e-10j]
+ [ 0.-1.67175219e-09j  0.+2.27616839e-09j  0.+6.59824077e-09j   0.+6.12916921e-10j  0.-7.72199756e-09j]]
+
+5. Matriz capacitância da linha reduzida 3x3
+[[ 0.-6.19255573e-08j  0.-4.52895152e-08j  0.+9.86895644e-08j]
+ [ 0.-4.52895152e-08j -0.+6.22314185e-08j  0.-4.52895152e-08j]
+ [-0.+9.86895644e-08j  0.-4.52895152e-08j  0.-6.19255573e-08j]]
+
+6. Matriz capacitância da linha reduzida 3x3 - sem CI
+[[ 0.-3.91544005e-08j  0.-3.77683094e-08j -0.+8.06809586e-08j]
+ [ 0.-3.77683094e-08j  0.+9.06642615e-08j -0.-3.77683094e-08j]
+ [ 0.+8.06809586e-08j -0.-3.77683094e-08j -0.-3.91544005e-08j]]
+
+7. Capacitância aparente por fase da linha no primeiro trecho(nF/km):
+Fase A: - 88.6256j
+Fase B: 107.5209j
+Fase C: - 88.6256j
+
+8. Capacitância aparente por fase da linha no primeiro trecho sem CI(nF/km):
+Fase A: - 60.6107j
+Fase B: 128.4326j
+Fase C: - 60.6107j
+
+9. Capacitância de serviço do primeiro trecho da linha (nF): - 23.2434j
+
+10. Capacitância de serviço do primeiro trecho da linha sem CI (nF): 2.4037j
+
+11. Matriz capacitância da linha 5x5 transposta
+[[0.-2.68124589e-08j 0.+2.69166823e-09j 0.+2.69166823e-09j  0.+2.75163098e-09j 0.+2.75163098e-09j]
+ [0.+2.69166823e-09j 0.-2.68124589e-08j 0.+2.69166823e-09j  0.+2.75163098e-09j 0.+2.75163098e-09j]
+ [0.+2.69166823e-09j 0.+2.69166823e-09j 0.-2.68124589e-08j  0.+2.75163098e-09j 0.+2.75163098e-09j]
+ [0.+2.75163098e-09j 0.+2.75163098e-09j 0.+2.75163098e-09j  0.-7.81980692e-09j 0.+6.04581224e-10j]
+ [0.+2.75163098e-09j 0.+2.75163098e-09j 0.+2.75163098e-09j  0.+6.04581224e-10j 0.-7.81980692e-09j]]
+
+12. Matriz capacitância da linha 5x5 transposta - sem CI
+[[0.-2.40552407e-10j 0.+1.46181120e-09j 0.+1.46181120e-09j  0.+2.40088566e-09j 0.+2.40088566e-09j]
+ [0.+1.46181120e-09j 0.-2.40552407e-10j 0.+1.46181120e-09j  0.+2.40088566e-09j 0.+2.40088566e-09j]
+ [0.+1.46181120e-09j 0.+1.46181120e-09j 0.-2.40552407e-10j  0.+2.40088566e-09j 0.+2.40088566e-09j]
+ [0.+2.40088566e-09j 0.+2.40088566e-09j 0.+2.40088566e-09j  0.-7.72199756e-09j 0.+6.12916921e-10j]
+ [0.+2.40088566e-09j 0.+2.40088566e-09j 0.+2.40088566e-09j  0.+6.12916921e-10j 0.-7.72199756e-09j]]
+
+13. Matriz capacitância da linha reduzida 3x3 transposta
+[[0.-2.47137101e-08j 0.+4.79041701e-09j 0.+4.79041701e-09j]
+ [0.+4.79041701e-09j 0.-2.47137101e-08j 0.+4.79041701e-09j]
+ [0.+4.79041701e-09j 0.+4.79041701e-09j 0.-2.47137101e-08j]]
+
+14. Matriz capacitância da linha reduzida 3x3 transposta - sem CI
+[[0.+1.38110649e-09j 0.+3.08347010e-09j 0.+3.08347010e-09j]
+ [0.+3.08347010e-09j 0.+1.38110649e-09j 0.+3.08347010e-09j]
+ [0.+3.08347010e-09j 0.+3.08347010e-09j 0.+1.38110649e-09j]]
+
+15. Capacitância aparente por fase da linha no primeiro trecho(nF/km):
+Fase A: - 29.5041j
+Fase B: - 29.5041j
+Fase C: - 29.5041j
+
+16. Capacitância aparente por fase da linha no primeiro trecho sem CI(nF/km):
+Fase A: - 1.7024j
+Fase B: - 1.7024j
+Fase C: - 1.7024j
+
+17. Capacitância de serviço do primeiro trecho da linha (nF): - 29.5041j
+
+18. Capacitância de serviço do primeiro trecho da linha sem CI (nF): - 1.7024j
+
+*********************************************
