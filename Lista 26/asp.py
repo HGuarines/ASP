@@ -1597,3 +1597,432 @@ class ParametrosLinha:
 
         return Z_servico_array, Z_servico
 
+# Newton Rapshon
+
+
+def matriz_ybus(df_ybus):
+    try:
+        # Encontra o número de barras corretamente
+        n_barras = int(max(df_ybus['de_barra'].max(),
+                       df_ybus['para_barra'].max()))
+
+        # Inicializa Ybus
+        Ybus = np.zeros((n_barras, n_barras), dtype=complex)
+
+        # Admissão série (y_ij) e shunt (y_sh)
+        z_lt = df_ybus['r_lt'] + 1j * df_ybus['x_lt']
+        y_lt_serie = 1.0 / z_lt
+        # y_lt no seu dado parece ser o b_shunt
+        y_lt_shunt = 1j * df_ybus['y_lt']
+
+        # Itera UMA VEZ sobre as linhas de transmissão
+        for idx in range(len(df_ybus)):
+            # Índices base 0
+            i = int(df_ybus.loc[idx, 'de_barra']) - 1
+            j = int(df_ybus.loc[idx, 'para_barra']) - 1
+
+            y_serie = y_lt_serie[idx]
+            y_shunt_half = y_lt_shunt[idx] / 2.0  # Modelo PI
+
+            # Elementos Fora-Diagonal (Y_ij e Y_ji)
+            Ybus[i, j] = Ybus[i, j] - y_serie
+            Ybus[j, i] = Ybus[i, j]  # Matriz é simétrica
+
+            # Elementos Diagonais (Y_ii e Y_jj)
+            Ybus[i, i] = Ybus[i, i] + y_serie + y_shunt_half
+            Ybus[j, j] = Ybus[j, j] + y_serie + y_shunt_half
+
+        return Ybus
+    except Exception as e:
+        print(f"Ocorreu um erro ao montar a matriz Ybus: {e}")
+        exit()
+
+
+def get_col_or_default(df, col_name, default_val):
+    """Lê uma coluna do df. Se não existir, retorna um array de default_val."""
+    import pandas as pd
+    if col_name in df.columns:
+        return df[col_name].to_numpy()
+    else:
+        # Retorna um array do tamanho certo com o valor default
+        return np.full(len(df), default_val)
+
+
+def fluxo_newton_raphson(df_fluxo, Ybus, iteracoes=3, tolerancia=1e-5):
+    """
+    Calcula o fluxo de potência pelo método de Newton-Raphson
+    considerando um modelo de carga ZIP (Tensão-Dependente).
+
+    Argumentos:
+    df_fluxo: DataFrame com os dados das barras.
+              Para o modelo ZIP, deve conter as colunas:
+              'Kpp', 'Kpi', 'Kpz' (soma deve ser 1 ou 0)
+              'Kqp', 'Kqi', 'Kqz' (soma deve ser 1 ou 0)
+              Se as colunas não existirem, assume 100% potência constante.
+    Ybus: Matriz de admitância do sistema (numpy array complexo).
+    iteracoes: Número máximo de iterações.
+    tolerancia: Critério de convergência para o mismatch máximo.
+
+    Retorna:
+    Um DataFrame com os resultados das variáveis (V, phi, P, Q).
+    """
+    import numpy as np
+    import pandas as pd
+    try:
+        # --- 1. Inicialização ---
+        n_barras = len(df_fluxo)
+
+        # Separa G e B da Ybus
+        G = np.real(Ybus)
+        B = np.imag(Ybus)
+
+        # Tipo de barra (array)
+        tipo = df_fluxo['tipo_barra'].to_numpy()
+
+        # Índices das barras
+        pq_buses = np.where(tipo == 'PQ')[0]
+        pv_buses = np.where(tipo == 'PV')[0]
+        swing_bus = np.where(tipo == 'swing')[0][0]
+
+        # Barras que entram no cálculo da Jacobiana (não-swing)
+        non_swing_buses = np.where(tipo != 'swing')[0]
+
+        # --- Dados do Modelo ZIP ---
+        # Cargas totais especificadas (Pci, Qci)
+        P_carga_base = df_fluxo['Pci'].to_numpy()
+        Q_carga_base = df_fluxo['Qci'].to_numpy()
+
+        # Geração especificada
+        P_gen_spec = df_fluxo['Pgi'].to_numpy()
+        Q_gen_spec = df_fluxo['Qgi'].to_numpy()
+
+        # Checa se alguma coluna ZIP existe
+        zip_cols_present = any(c in df_fluxo.columns for c in [
+                               'Kpp', 'Kpi', 'Kpz', 'Kqp', 'Kqi', 'Kqz'])
+
+        if zip_cols_present:
+            print("  Modelo de carga ZIP detectado. Lendo coeficientes.")
+            # Coeficientes de Potência Ativa
+            Kpp = get_col_or_default(df_fluxo, 'Kpp', 0.0)
+            Kpi = get_col_or_default(df_fluxo, 'Kpi', 0.0)
+            Kpz = get_col_or_default(df_fluxo, 'Kpz', 0.0)
+            # Coeficientes de Potência Reativa
+            Kqp = get_col_or_default(df_fluxo, 'Kqp', 0.0)
+            Kqi = get_col_or_default(df_fluxo, 'Kqi', 0.0)
+            Kqz = get_col_or_default(df_fluxo, 'Kqz', 0.0)
+
+            # Garante que, se a soma for 0, use 100% P-constante
+            # (evita divisão por zero se o usuário não preencher nada)
+            soma_p = Kpp + Kpi + Kpz
+            soma_q = Kqp + Kqi + Kqz
+
+            idx_p_zero = np.where(soma_p == 0)[0]
+            Kpp[idx_p_zero] = 1.0
+
+            idx_q_zero = np.where(soma_q == 0)[0]
+            Kqp[idx_q_zero] = 1.0
+
+        else:
+            print(
+                "  Modelo de carga ZIP não encontrado. Assumindo 100% Potência Constante.")
+            Kpp = np.ones(n_barras)  # 100% Pot Constante
+            Kpi = np.zeros(n_barras)
+            Kpz = np.zeros(n_barras)
+            Kqp = np.ones(n_barras)  # 100% Pot Constante
+            Kqi = np.zeros(n_barras)
+            Kqz = np.zeros(n_barras)
+
+        # ---------------------------
+
+        # Vetor de estado inicial (V e delta)
+        V_mag = df_fluxo['Ei'].to_numpy().copy()
+        # Assume que 'Fi' está em RADIANOS
+        V_ang = df_fluxo['Fi'].to_numpy().copy()
+
+        # Garante "flat start" (1.0 p.u., 0 rad) se não especificado
+        V_mag[V_mag == 0.0] = 1.0
+        V_ang[pq_buses] = 0.0
+        V_ang[pv_buses] = 0.0
+
+        # Arrays para armazenar resultados (iter + 1 para estado inicial)
+        Vim = np.zeros((iteracoes + 1, n_barras), dtype=complex)
+        Pim = np.zeros((iteracoes + 1, n_barras))
+        Qim = np.zeros((iteracoes + 1, n_barras))
+
+        Vim[0] = V_mag * np.exp(1j * V_ang)
+        # (Pim[0] e Qim[0] serão calculados na iteração 0)
+
+        # Mapeamento de índices para a Jacobiana
+        delta_idx_map = {bus_idx: i for i,
+                         bus_idx in enumerate(non_swing_buses)}
+        v_idx_map = {bus_idx: i for i, bus_idx in enumerate(pq_buses)}
+
+        n_ns = len(non_swing_buses)  # n_pv + n_pq
+        n_pq = len(pq_buses)
+
+        print(f"Iniciando Newton-Raphson (ZIP) para {n_barras} barras.")
+        print(f"  Tamanho da Jacobiana: {(n_ns + n_pq)} x {(n_ns + n_pq)}")
+
+        # --- 2. Loop de Iterações ---
+        num_resultados = iteracoes + 1
+
+        for i in range(iteracoes):
+
+            V_complex = V_mag * np.exp(1j * V_ang)
+
+            # --- 2a. Calcular Potências Injetadas (P_inj, Q_inj) ---
+            # S_inj* = V* . (Ybus . V)
+            S_star_inj = V_complex.conj() * (Ybus.dot(V_complex))
+            P_inj = S_star_inj.real
+            Q_inj = -S_star_inj.imag  # S* = P - jQ, então Q = -imag(S*)
+
+            # --- 2b. Calcular Cargas (P_load, Q_load) - MODELO ZIP ---
+            # V0 é assumido como 1.0 p.u.
+            P_load = P_carga_base * (Kpp + Kpi * V_mag + Kpz * V_mag**2)
+            Q_load = Q_carga_base * (Kqp + Kqi * V_mag + Kqz * V_mag**2)
+
+            # --- 2c. Calcular Mismatches (Delta P, Delta Q) ---
+            # Mismatch = Geração_Spec - Carga_Calc - Injeção_Calc
+            delta_P = P_gen_spec - P_load - P_inj
+            delta_Q = Q_gen_spec - Q_load - Q_inj
+
+            # Vetor Mismatch (apenas barras relevantes)
+            mismatch_P = delta_P[non_swing_buses]
+            mismatch_Q = delta_Q[pq_buses]
+            mismatch_vector = np.concatenate([mismatch_P, mismatch_Q])
+
+            # --- 2d. Checar Convergência ---
+            max_mismatch = np.max(np.abs(mismatch_vector))
+
+            # Armazena os valores ANTES da correção
+            # Geração = Injeção + Carga
+            if i == 0:  # Armazena estado inicial
+                Pim[0] = P_inj + P_load
+                Qim[0] = Q_inj + Q_load
+
+            if max_mismatch < tolerancia:
+                print(
+                    f"Newton-Raphson (ZIP) convergiu na iteração {i} (Mismatch: {max_mismatch:.2e})")
+                num_resultados = i + 1
+                break
+
+            print(f"  Iteração {i+1}: Mismatch max = {max_mismatch:.4e}")
+
+            # --- 2e. Calcular Derivadas da Carga (para a Jacobiana) ---
+            # d(P_load) / d|V|
+            dP_load_dV = P_carga_base * (Kpi + 2.0 * Kpz * V_mag)
+            # d(Q_load) / d|V|
+            dQ_load_dV = Q_carga_base * (Kqi + 2.0 * Kqz * V_mag)
+
+            # --- 2f. Montar a Jacobiana ---
+            # J = J_injeção + J_carga
+            # J_carga só tem termos na diagonal de J12 e J22
+
+            J11 = np.zeros((n_ns, n_ns))  # dP/d_delta
+            J12 = np.zeros((n_ns, n_pq))  # dP/d_V
+            J21 = np.zeros((n_pq, n_ns))  # dQ/d_delta
+            J22 = np.zeros((n_pq, n_pq))  # dQ/d_V
+
+            # Loop por todas as barras para preencher a Jacobiana
+            for r in range(n_barras):  # Barra 'r' (linha)
+
+                Vi = V_mag[r]
+
+                # --- Termos Diagonais (r == c) ---
+
+                # J_injeção (P_inj, Q_inj) - (Standard)
+                J11_ii_inj = -Q_inj[r] - (B[r, r] * Vi**2)
+                J21_ii_inj = P_inj[r] - (G[r, r] * Vi**2)
+                J12_ii_inj = (P_inj[r] / Vi) + (G[r, r] * Vi)
+                J22_ii_inj = (Q_inj[r] / Vi) - (B[r, r] * Vi)
+
+                # J_carga (P_load, Q_load) - (Novo)
+                # d(P_load_i) / d(delta_i) = 0
+                # d(Q_load_i) / d(delta_i) = 0
+                J12_ii_load = dP_load_dV[r]
+                J22_ii_load = dQ_load_dV[r]
+
+                # Termos FINAIS da Jacobiana (J_inj + J_load)
+                J11_ii = J11_ii_inj  # + 0
+                J21_ii = J21_ii_inj  # + 0
+                J12_ii = J12_ii_inj + J12_ii_load
+                J22_ii = J22_ii_inj + J22_ii_load
+
+                # Atribui se a barra 'r' for relevante
+                if r in delta_idx_map:  # Linha de P (PV ou PQ)
+                    row_p = delta_idx_map[r]
+                    col_d = delta_idx_map[r]
+                    J11[row_p, col_d] = J11_ii
+                    if r in v_idx_map:  # Coluna de V (só PQ)
+                        col_v = v_idx_map[r]
+                        J12[row_p, col_v] = J12_ii
+
+                if r in v_idx_map:  # Linha de Q (só PQ)
+                    row_q = v_idx_map[r]
+                    col_d = delta_idx_map[r]  # Coluna de delta
+                    J21[row_q, col_d] = J21_ii
+                    col_v = v_idx_map[r]  # Coluna de V
+                    J22[row_q, col_v] = J22_ii
+
+                # --- Termos Fora-Diagonal (r != c) ---
+                # (Não mudam, pois d(Load_i) / d(V_j) = 0)
+                for c in range(n_barras):  # Barra 'c' (coluna)
+                    if r == c:
+                        continue
+
+                    Vk = V_mag[c]
+                    theta_ik = V_ang[r] - V_ang[c]
+                    cos_th = np.cos(theta_ik)
+                    sin_th = np.sin(theta_ik)
+
+                    Gik = G[r, c]
+                    Bik = B[r, c]
+
+                    # Termos da injeção (J_std)
+                    J11_ik = Vi * Vk * (Gik * sin_th - Bik * cos_th)
+                    J12_ik = Vi * Vk * (Gik * cos_th + Bik * sin_th)
+                    J21_ik = -Vi * Vk * (Gik * cos_th + Bik * sin_th)
+                    J22_ik = Vi * Vk * (Gik * sin_th - Bik * cos_th)
+
+                    # Atribui se a combinação r, c for relevante
+                    if r in delta_idx_map and c in delta_idx_map:
+                        J11[delta_idx_map[r], delta_idx_map[c]] = J11_ik
+                    if r in delta_idx_map and c in v_idx_map:
+                        J12[delta_idx_map[r], v_idx_map[c]] = J12_ik
+                    if r in v_idx_map and c in delta_idx_map:
+                        J21[v_idx_map[r], delta_idx_map[c]] = J21_ik
+                    if r in v_idx_map and c in v_idx_map:
+                        J22[v_idx_map[r], v_idx_map[c]] = J22_ik
+
+            # --- 2g. Montar Jacobiana completa e Resolver ---
+            J_top = np.hstack([J11, J12])
+            J_bottom = np.hstack([J21, J22])
+            J = np.vstack([J_top, J_bottom])
+
+            try:
+                # Resolve J * delta_x = mismatch_vector
+                delta_x = np.linalg.solve(J, mismatch_vector)
+            except np.linalg.LinAlgError:
+                print(
+                    f"Erro: Jacobiana singular na iteração {i+1}. Abortando.")
+                num_resultados = i + 1
+                break
+
+            # --- 2h. Atualizar Vetor de Estado (V e delta) ---
+            delta_delta = delta_x[:n_ns]
+            delta_v_mag = delta_x[n_ns:]
+
+            V_ang[non_swing_buses] += delta_delta
+            V_mag[pq_buses] += delta_v_mag
+
+            # Força magnitude de V em barras PV (especificação)
+            V_mag[pv_buses] = df_fluxo['Ei'][pv_buses].to_numpy()
+
+            # --- 2i. Armazenar Resultados da Iteração ---
+            V_complex_final = V_mag * np.exp(1j * V_ang)
+            Vim[i+1] = V_complex_final
+
+            # Recalcula P/Q finais (incluindo Swing) com os novos V
+            S_star_final_inj = (V_complex_final.conj()) * \
+                (Ybus.dot(V_complex_final))
+            P_inj_final = S_star_final_inj.real
+            Q_inj_final = -S_star_final_inj.imag
+
+            # Recalcular cargas finais
+            P_load_final = P_carga_base * (Kpp + Kpi * V_mag + Kpz * V_mag**2)
+            Q_load_final = Q_carga_base * (Kqp + Kqi * V_mag + Kqz * V_mag**2)
+
+            # Geração Total = Injeção de Rede + Demanda de Carga
+            P_gen_final = P_inj_final + P_load_final
+            Q_gen_final = Q_inj_final + Q_load_final
+
+            Pim[i+1] = P_gen_final
+            Qim[i+1] = Q_gen_final
+
+        # Fim do loop de iterações
+
+        if i == iteracoes - 1 and max_mismatch > tolerancia:
+            print(
+                f"Atenção: Newton-Raphson (ZIP) NÃO convergiu em {iteracoes} iterações.")
+            num_resultados = iteracoes + 1
+
+        # --- 3. Formatação do DataFrame de Saída (igual ao G-S) ---
+
+        # Trunca arrays de resultado se convergiu antes
+        mag = np.abs(Vim[:num_resultados])
+        phasor = np.degrees(np.angle(Vim[:num_resultados]))
+        potReativa = Qim[:num_resultados]
+        potAtiva = Pim[:num_resultados]
+
+        z = num_resultados  # Número de linhas (it_0, it_1, ...)
+
+        # (O restante do código para formatar o DataFrame de saída
+        # é exatamente igual ao da sua função anterior)
+
+        # 1. Nomes das colunas
+        mag_cols = [f'E_bar{b+1}' for b in range(n_barras) if tipo[b] == 'PQ']
+        phasor_cols = [
+            f'phi_bar{b+1}' for b in range(n_barras) if tipo[b] != 'swing']
+        potReativa_cols = [
+            # PV e Swing
+            f'Q_bar{b+1}' for b in range(n_barras) if tipo[b] != 'PQ']
+        potAtiva_cols = [
+            f'P_bar{b+1}' for b in range(n_barras) if tipo[b] == 'swing']
+
+        # 2. Máscaras booleanas
+        mask_mag = [tipo[b] == 'PQ' for b in range(n_barras)]
+        mask_phasor = [tipo[b] != 'swing' for b in range(n_barras)]
+        mask_potReativa = [tipo[b] != 'PQ' for b in range(n_barras)]
+        mask_potAtiva = [tipo[b] == 'swing' for b in range(n_barras)]
+
+        # 3. Filtra os DADOS
+        mag_filtrado = mag[:, mask_mag]
+        phasor_filtrado = phasor[:, mask_phasor]
+        potReativa_filtrada = potReativa[:, mask_potReativa]
+        potAtiva_filtrada = potAtiva[:, mask_potAtiva]
+
+        # 4. Junta nomes e dados
+        cols = mag_cols + phasor_cols + potReativa_cols + potAtiva_cols
+        # Tratamento para caso de não haver colunas (evita erro no hstack)
+        dados_list = []
+        if mag_filtrado.size > 0:
+            dados_list.append(mag_filtrado)
+        if phasor_filtrado.size > 0:
+            dados_list.append(phasor_filtrado)
+        if potReativa_filtrada.size > 0:
+            dados_list.append(potReativa_filtrada)
+        if potAtiva_filtrada.size > 0:
+            dados_list.append(potAtiva_filtrada)
+
+        if not dados_list:
+            print("Nenhum dado de resultado para exibir (verifique os tipos de barra).")
+            return pd.DataFrame()
+
+        dados_filtrados = np.hstack(dados_list)
+
+        # 5. Cria o DataFrame
+        df_vim = pd.DataFrame(dados_filtrados, columns=cols, index=[
+                              f'it_{i}' for i in range(z)])
+
+        # Adiciona colunas de diferença (exatamente como no seu código)
+        df = df_vim.copy()
+        nova_ordem = []
+
+        for col in df.columns:
+            diff = df[col] - df[col].shift(1)
+            diff.iloc[0] = 0  # primeira linha = 0
+            diff_col = f"{col}_diff"
+            df[diff_col] = diff
+            nova_ordem.append(col)
+            nova_ordem.append(diff_col)
+
+        df_vim = df[nova_ordem]
+
+        return df_vim
+
+    except Exception as e:
+        print(
+            f"Ocorreu um erro durante o cálculo do fluxo (Newton-Raphson ZIP): {e}")
+        import traceback
+        traceback.print_exc()
+        return pd.DataFrame()  # Retorna DF vazio em caso de erro

@@ -1,0 +1,11 @@
+Na barra swing (barra 1)(barra de tensão controlada) definimos a tensão como 1,05pu
+e o fasor como 0 para servir de referência.
+
+Na barra PV (barra 3) definimos a tensão como 1,05pu e a potência ativa gerada como parte 
+da potência ativa consumida pela carga.
+
+Na barra PQ (barra 2) definimos a tensão na primeira iteração como 1pu e fasor 0.
+
+A tensão na carga está próxima de 1pu e só foi
+calculado até a terceira iteração pois nela ocorre
+a convergência.

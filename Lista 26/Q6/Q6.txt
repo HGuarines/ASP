@@ -1,0 +1,3 @@
+A tensão na carga está próxima de 1pu e só foi
+calculado até a terceira iteração pois nela ocorre
+a convergência.
